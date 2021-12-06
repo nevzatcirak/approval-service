@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>me.nevzatcirak.service.approval</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>me.nevzatcirak.service.approval</groupId>
+    <artifactId>boot</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Approval Application Module</name>
+    <properties>
+        <jib.maven.plugin.version>1.8.0</jib.maven.plugin.version>
+        <docker-image-name>infra-approval</docker-image-name>
+        <java.version>11</java.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib.maven.plugin.version}</version>
+                <configuration>
+                    <from>
+                        <image>cregistry.k2.net/tbgth-base/gcr.io/distroless/java:11</image>
+                    </from>
+                    <to>
+                        <image>cregistry.k2.net/infra/${docker-image-name}</image>
+                        <tags>
+                            <!--                            <tag>${project.version}</tag>-->
+                            <tag>latest</tag>
+                        </tags>
+                    </to>
+                    <container>
+                        <!--                        <jvmFlags>-->
+                        <!--                            <jvmFlag>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5007</jvmFlag>-->
+                        <!--                        </jvmFlags>-->
+                        <!--<mainClass>org.springframework.boot.loader.JarLauncher</mainClass>-->
+                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                    </container>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
