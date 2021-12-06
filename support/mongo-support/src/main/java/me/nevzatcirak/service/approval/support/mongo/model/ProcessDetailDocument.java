@@ -1,4 +1,4 @@
-package me.nevzatcirak.service.approval.mongo.model;
+package me.nevzatcirak.service.approval.support.mongo.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,7 +12,7 @@ import java.io.Serializable;
  * Created by ncirak at 06/12/2021
  */
 @Document(collection = "approval-process-detail")
-public class ProcessDetail implements Serializable {
+public class ProcessDetailDocument implements Serializable {
     @Id
     private String id;
 

@@ -1,4 +1,4 @@
-package me.nevzatcirak.service.approval.mongo.model;
+package me.nevzatcirak.service.approval.support.mongo.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
@@ -24,7 +24,7 @@ import java.util.Set;
         @CompoundIndex(name = "id_details", def = "{'id': 1, 'details.status': 1}"),
 
 })
-public class Process implements Serializable {
+public class ProcessDocument implements Serializable {
     @Id
     private String id;
 
@@ -38,11 +38,11 @@ public class Process implements Serializable {
 
     @DBRef
     @Field("states")
-    private Set<ProcessState> states;
+    private Set<ProcessStateDocument> states;
 
     @DBRef
     @Field("details")
-    private Set<ProcessDetail> details;
+    private Set<ProcessDetailDocument> details;
 
     public String getId() {
         return id;
@@ -68,19 +68,19 @@ public class Process implements Serializable {
         this.documentId = documentId;
     }
 
-    public Set<ProcessState> getStates() {
+    public Set<ProcessStateDocument> getStates() {
         return states;
     }
 
-    public void setStates(Set<ProcessState> states) {
+    public void setStates(Set<ProcessStateDocument> states) {
         this.states = states;
     }
 
-    public Set<ProcessDetail> getDetails() {
+    public Set<ProcessDetailDocument> getDetails() {
         return details;
     }
 
-    public void setDetails(Set<ProcessDetail> details) {
+    public void setDetails(Set<ProcessDetailDocument> details) {
         this.details = details;
     }
 }
