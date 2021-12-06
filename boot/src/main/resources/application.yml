@@ -1,0 +1,19 @@
+server:
+  port: ${port}
+
+spring:
+  application:
+    name: approval
+  main:
+    allow-bean-definition-overriding: true
+  jackson:
+    serialization:
+      indent_output: true
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: test
+      username: infra
+      password: infra
+      authentication-database: admin

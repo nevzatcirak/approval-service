@@ -1,6 +1,8 @@
 package me.nevzatcirak.service.approval.support.mongo.model;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -17,13 +19,23 @@ public class ProcessDetailDocument implements Serializable {
     private String id;
 
     @Field("seqNo")
-    private Long sequenceNumber;
+    private Integer sequenceNumber;
 
     @Field("username")
     private String username;
 
     @Field("status")
     private String status;
+
+    public ProcessDetailDocument() {
+    }
+
+    @PersistenceConstructor
+    public ProcessDetailDocument(@Value("#root.seqNo ?: 1") final Integer sequenceNumber, final String username, final String status) {
+        this.sequenceNumber = sequenceNumber;
+        this.username = username;
+        this.status = status;
+    }
 
     public String getId() {
         return id;
@@ -33,11 +45,11 @@ public class ProcessDetailDocument implements Serializable {
         this.id = id;
     }
 
-    public Long getSequenceNumber() {
+    public Integer getSequenceNumber() {
         return sequenceNumber;
     }
 
-    public void setSequenceNumber(Long sequenceNumber) {
+    public void setSequenceNumber(Integer sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
     }
 

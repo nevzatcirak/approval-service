@@ -44,6 +44,9 @@ public class ProcessDocument implements Serializable {
     @Field("details")
     private Set<ProcessDetailDocument> details;
 
+    public ProcessDocument() {
+    }
+
     public String getId() {
         return id;
     }
