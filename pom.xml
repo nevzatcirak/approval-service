@@ -18,6 +18,9 @@
 
 	<modules>
 		<module>boot</module>
+		<module>service</module>
+		<module>api</module>
+		<module>support</module>
 	</modules>
 
 </project>
