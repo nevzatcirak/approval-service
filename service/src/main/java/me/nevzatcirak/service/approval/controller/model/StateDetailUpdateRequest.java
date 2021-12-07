@@ -1,6 +1,6 @@
 package me.nevzatcirak.service.approval.controller.model;
 
-import me.nevzatcirak.service.approval.api.model.ProcessState;
+import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
 
 import java.io.Serializable;
 
@@ -11,8 +11,7 @@ import java.io.Serializable;
  */
 public class StateDetailUpdateRequest implements Serializable {
     private String username;
-    private Long updatedAt;
-    private ProcessState status;
+    private ApprovalProcessState status;
 
     public String getUsername() {
         return username;
@@ -22,19 +21,11 @@ public class StateDetailUpdateRequest implements Serializable {
         this.username = username;
     }
 
-    public Long getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Long updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public ProcessState getStatus() {
+    public ApprovalProcessState getStatus() {
         return status;
     }
 
-    public void setStatus(ProcessState status) {
+    public void setStatus(ApprovalProcessState status) {
         this.status = status;
     }
 }

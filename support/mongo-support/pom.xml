@@ -6,7 +6,6 @@
         <groupId>me.nevzatcirak.service.approval</groupId>
         <artifactId>support</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>me.nevzatcirak.service.approval</groupId>

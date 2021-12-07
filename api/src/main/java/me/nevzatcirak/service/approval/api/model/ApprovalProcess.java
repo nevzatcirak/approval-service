@@ -8,18 +8,18 @@ import java.util.Set;
  * @mail ncirak@havelsan.com.tr
  * Created by ncirak at 06/12/2021
  */
-public class Process implements Serializable {
+public class ApprovalProcess implements Serializable {
     private String id;
     private String documentType;
     private String documentId;
     private String status;
-    private Set<ProcessDetail> detail;
+    private Set<ApprovalProcessDetail> detail;
 
     public String getId() {
         return id;
     }
 
-    public Process setId(String id) {
+    public ApprovalProcess setId(String id) {
         this.id = id;
         return this;
     }
@@ -28,7 +28,7 @@ public class Process implements Serializable {
         return documentType;
     }
 
-    public Process setDocumentType(String documentType) {
+    public ApprovalProcess setDocumentType(String documentType) {
         this.documentType = documentType;
         return this;
     }
@@ -37,7 +37,7 @@ public class Process implements Serializable {
         return documentId;
     }
 
-    public Process setDocumentId(String documentId) {
+    public ApprovalProcess setDocumentId(String documentId) {
         this.documentId = documentId;
         return this;
     }
@@ -46,16 +46,16 @@ public class Process implements Serializable {
         return status;
     }
 
-    public Process setStatus(String status) {
+    public ApprovalProcess setStatus(String status) {
         this.status = status;
         return this;
     }
 
-    public Set<ProcessDetail> getDetail() {
+    public Set<ApprovalProcessDetail> getDetail() {
         return detail;
     }
 
-    public Process setDetail(Set<ProcessDetail> detail) {
+    public ApprovalProcess setDetail(Set<ApprovalProcessDetail> detail) {
         this.detail = detail;
         return this;
     }

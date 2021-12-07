@@ -1,5 +1,7 @@
 package me.nevzatcirak.service.approval.controller.model;
 
+import me.nevzatcirak.service.approval.api.model.ApproverSummary;
+
 import java.io.Serializable;
 import java.util.Set;
 

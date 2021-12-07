@@ -1,4 +1,4 @@
-package me.nevzatcirak.service.approval.controller.model;
+package me.nevzatcirak.service.approval.api.model;
 
 import java.io.Serializable;
 

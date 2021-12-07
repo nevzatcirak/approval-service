@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @mail ncirak@havelsan.com.tr
  * Created by ncirak at 06/12/2021
  */
-public class ProcessDetail implements Serializable {
+public class ApprovalProcessDetail implements Serializable {
     private Long sequenceNumber;
     private String username;
     private String status;
@@ -16,7 +16,7 @@ public class ProcessDetail implements Serializable {
         return sequenceNumber;
     }
 
-    public ProcessDetail setSequenceNumber(Long sequenceNumber) {
+    public ApprovalProcessDetail setSequenceNumber(Long sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
         return this;
     }
@@ -25,7 +25,7 @@ public class ProcessDetail implements Serializable {
         return username;
     }
 
-    public ProcessDetail setUsername(String username) {
+    public ApprovalProcessDetail setUsername(String username) {
         this.username = username;
         return this;
     }
@@ -34,7 +34,7 @@ public class ProcessDetail implements Serializable {
         return status;
     }
 
-    public ProcessDetail setStatus(String status) {
+    public ApprovalProcessDetail setStatus(String status) {
         this.status = status;
         return this;
     }

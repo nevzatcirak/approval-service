@@ -5,14 +5,14 @@ package me.nevzatcirak.service.approval.api.model;
  * @mail ncirak@havelsan.com.tr
  * Created by ncirak at 07/12/2021
  */
-public enum ProcessState {
+public enum ApprovalProcessState {
     REJECTED(-1),
     WAITING(0),
     APPROVED(1);
 
     private final int value;
 
-    ProcessState(int value) {
+    ApprovalProcessState(int value) {
         this.value = value;
     }
 

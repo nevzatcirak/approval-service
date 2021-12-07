@@ -1,8 +1,8 @@
 package me.nevzatcirak.service.approval.controller;
 
-import me.nevzatcirak.service.approval.controller.model.StateDetailUpdateRequest;
 import me.nevzatcirak.service.approval.controller.model.CreateApprovalRequest;
 import me.nevzatcirak.service.approval.controller.model.ProcessRequestState;
+import me.nevzatcirak.service.approval.controller.model.StateDetailUpdateRequest;
 import me.nevzatcirak.service.approval.controller.model.StatusQueryRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ public interface ProcessController {
      * Creates new approval process by using Service type, Document Id and Approver Info
      *
      * @param request
-     * @return
+     * @return ApprovalProcess
      */
     @PostMapping("/create")
     ResponseEntity<?> createApprovalProcess(@RequestBody CreateApprovalRequest request);
@@ -29,7 +29,7 @@ public interface ProcessController {
      * @param type
      * @param documentId
      * @param stateDetailUpdateRequest
-     * @return Process
+     * @return ApprovalProcess
      */
     @PutMapping("/state/update/{type}/{documentId}")
     ResponseEntity<?> updateProcessState(@PathVariable String type,
@@ -37,24 +37,24 @@ public interface ProcessController {
                                          @RequestBody StateDetailUpdateRequest stateDetailUpdateRequest);
 
     /**
-     * Query type statuses by filtering id list
-     *
-     * @param queryRequest
-     * @return Map<ID, ProcessState>
-     */
-    @PostMapping("/query-status")
-    ResponseEntity<?> queryProcessStatus(@RequestBody StatusQueryRequest queryRequest);
-
-    /**
      * Update a process detail state by using username and status
      *
      * @param processId
      * @param stateDetailUpdateRequest
-     * @return Process
+     * @return ApprovalProcess
      */
     @PutMapping("/state/update/{processId}")
     ResponseEntity<?> updateProcessState(@PathVariable String processId,
                                          @RequestBody StateDetailUpdateRequest stateDetailUpdateRequest);
+
+    /**
+     * Query type statuses by filtering id list
+     *
+     * @param queryRequest contains document type and set of document ids
+     * @return Map<DocumentId, ProcessState>
+     */
+    @PostMapping("/query-status")
+    ResponseEntity<?> queryProcessStatus(@RequestBody StatusQueryRequest queryRequest);
 
     /**
      * Gets process list by filtering final status
@@ -62,7 +62,7 @@ public interface ProcessController {
      * @param type
      * @param documentId
      * @param status
-     * @return List of Process
+     * @return List of ApprovalProcess
      */
     @GetMapping("/state/{type}/{documentId}/{status}")
     ResponseEntity<?> getApprovalProcesses(@PathVariable String type,
@@ -74,7 +74,7 @@ public interface ProcessController {
      *
      * @param processId
      * @param status
-     * @return List of Process
+     * @return List of ApprovalProcess
      */
     @GetMapping("/state/{processId}/{status}")
     ResponseEntity<?> getApprovalProcesses(@PathVariable String processId,
@@ -85,7 +85,7 @@ public interface ProcessController {
      *
      * @param type
      * @param documentId
-     * @return Approver Username
+     * @return ApproverSummary
      */
     @GetMapping("/next/approver/{type}/{documentId}")
     ResponseEntity<?> getNextApprover(@PathVariable String type,
@@ -95,7 +95,7 @@ public interface ProcessController {
      * Gets next approver data of defined process
      *
      * @param processId
-     * @return Approver Username
+     * @return ApproverSummary
      */
     @GetMapping("/next/approver/{processId}")
     ResponseEntity<?> getNextApprover(@PathVariable String processId);
