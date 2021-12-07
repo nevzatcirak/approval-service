@@ -20,7 +20,7 @@ import java.util.Set;
 @Document(collection = "approval-process")
 @CompoundIndexes({
         @CompoundIndex(name = "document_type_id", def = "{'type': 1, 'docId':1}"),
-        @CompoundIndex(name = "id_state", def = "{'id': 1, 'states.state': 1}"),
+        @CompoundIndex(name = "id_state", def = "{'id': 1, 'state.state': 1}"),
         @CompoundIndex(name = "id_details", def = "{'id': 1, 'details.status': 1}"),
 
 })
@@ -28,7 +28,6 @@ public class ProcessDocument implements Serializable {
     @Id
     private String id;
 
-    @Indexed
     @Field("type")
     private String documentType;
 
@@ -37,8 +36,8 @@ public class ProcessDocument implements Serializable {
     private String documentId;
 
     @DBRef
-    @Field("states")
-    private Set<ProcessStateDocument> states;
+    @Field("state")
+    private ProcessStateDocument state;
 
     @DBRef
     @Field("details")
@@ -71,12 +70,12 @@ public class ProcessDocument implements Serializable {
         this.documentId = documentId;
     }
 
-    public Set<ProcessStateDocument> getStates() {
-        return states;
+    public ProcessStateDocument getState() {
+        return state;
     }
 
-    public void setStates(Set<ProcessStateDocument> states) {
-        this.states = states;
+    public void setStates(ProcessStateDocument state) {
+        this.state = state;
     }
 
     public Set<ProcessDetailDocument> getDetails() {
