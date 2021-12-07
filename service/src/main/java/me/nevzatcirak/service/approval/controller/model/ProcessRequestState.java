@@ -6,8 +6,8 @@ package me.nevzatcirak.service.approval.controller.model;
  * Created by ncirak at 07/12/2021
  */
 public enum ProcessRequestState {
-    REJECTED,
-    WAITING,
-    APPROVED,
-    ALL;
+    rejected,
+    waiting,
+    approved,
+    all;
 }
