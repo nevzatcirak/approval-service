@@ -7,16 +7,16 @@ import java.io.Serializable;
  * @mail ncirak@havelsan.com.tr
  * Created by ncirak at 06/12/2021
  */
-public class ApprovalProcessDetail implements Serializable {
-    private Long sequenceNumber;
+public class Approver implements Serializable {
+    private Integer sequenceNumber;
     private String username;
-    private String status;
+    private ApprovalProcessState status;
 
-    public Long getSequenceNumber() {
+    public Integer getSequenceNumber() {
         return sequenceNumber;
     }
 
-    public ApprovalProcessDetail setSequenceNumber(Long sequenceNumber) {
+    public Approver setSequenceNumber(Integer sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
         return this;
     }
@@ -25,16 +25,16 @@ public class ApprovalProcessDetail implements Serializable {
         return username;
     }
 
-    public ApprovalProcessDetail setUsername(String username) {
+    public Approver setUsername(String username) {
         this.username = username;
         return this;
     }
 
-    public String getStatus() {
+    public ApprovalProcessState getStatus() {
         return status;
     }
 
-    public ApprovalProcessDetail setStatus(String status) {
+    public Approver setStatus(ApprovalProcessState status) {
         this.status = status;
         return this;
     }

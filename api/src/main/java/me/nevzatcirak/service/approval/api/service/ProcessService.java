@@ -2,6 +2,7 @@ package me.nevzatcirak.service.approval.api.service;
 
 import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
+import me.nevzatcirak.service.approval.api.model.Approver;
 import me.nevzatcirak.service.approval.api.model.ApproverSummary;
 
 import java.util.Map;
@@ -77,15 +78,15 @@ public interface ProcessService {
      *
      * @param documentId
      * @param documentType
-     * @return ApproverSummary
+     * @return Approver
      */
-    ApproverSummary nextApprover(String documentId, String documentType);
+    Approver nextApprover(String documentId, String documentType);
 
     /**
      * Gets next approver data of defined process
      *
      * @param processId
-     * @return ApproverSummary
+     * @return Approver
      */
-    ApproverSummary nextApprover(String processId);
+    Approver nextApprover(String processId);
 }

@@ -12,8 +12,8 @@ public class ApprovalProcess implements Serializable {
     private String id;
     private String documentType;
     private String documentId;
-    private String status;
-    private Set<ApprovalProcessDetail> detail;
+    private ApprovalProcessState status;
+    private Set<Approver> detail;
 
     public String getId() {
         return id;
@@ -42,20 +42,20 @@ public class ApprovalProcess implements Serializable {
         return this;
     }
 
-    public String getStatus() {
+    public ApprovalProcessState getStatus() {
         return status;
     }
 
-    public ApprovalProcess setStatus(String status) {
+    public ApprovalProcess setStatus(ApprovalProcessState status) {
         this.status = status;
         return this;
     }
 
-    public Set<ApprovalProcessDetail> getDetail() {
+    public Set<Approver> getDetail() {
         return detail;
     }
 
-    public ApprovalProcess setDetail(Set<ApprovalProcessDetail> detail) {
+    public ApprovalProcess setDetail(Set<Approver> detail) {
         this.detail = detail;
         return this;
     }
