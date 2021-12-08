@@ -59,4 +59,15 @@ public class ApprovalProcess implements Serializable {
         this.detail = detail;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "ApprovalProcess{" +
+                "id='" + id + '\'' +
+                ", documentType='" + documentType + '\'' +
+                ", documentId='" + documentId + '\'' +
+                ", status=" + status +
+                ", detail=" + detail +
+                '}';
+    }
 }

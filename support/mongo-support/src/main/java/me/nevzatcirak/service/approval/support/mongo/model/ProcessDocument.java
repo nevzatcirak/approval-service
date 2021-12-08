@@ -1,5 +1,6 @@
 package me.nevzatcirak.service.approval.support.mongo.model;
 
+import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
@@ -20,7 +21,6 @@ import java.util.Set;
 @Document(collection = "approval-process")
 @CompoundIndexes({
         @CompoundIndex(name = "document_type_id", def = "{'type': 1, 'docId':1}"),
-        @CompoundIndex(name = "id_state", def = "{'id': 1, 'state.state': 1}"),
         @CompoundIndex(name = "id_details", def = "{'id': 1, 'details.status': 1}"),
 
 })
@@ -35,9 +35,8 @@ public class ProcessDocument implements Serializable {
     @Field("docId")
     private String documentId;
 
-    @DBRef
-    @Field("state")
-    private ProcessStateDocument state;
+    @Field("status")
+    private Integer status;
 
     @DBRef
     @Field("details")
@@ -70,12 +69,12 @@ public class ProcessDocument implements Serializable {
         this.documentId = documentId;
     }
 
-    public ProcessStateDocument getState() {
-        return state;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setStates(ProcessStateDocument state) {
-        this.state = state;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Set<ProcessDetailDocument> getDetails() {
@@ -84,5 +83,16 @@ public class ProcessDocument implements Serializable {
 
     public void setDetails(Set<ProcessDetailDocument> details) {
         this.details = details;
+    }
+
+    @Override
+    public String toString() {
+        return "ProcessDocument{" +
+                "id='" + id + '\'' +
+                ", documentType='" + documentType + '\'' +
+                ", documentId='" + documentId + '\'' +
+                ", status=" + status +
+                ", details=" + details +
+                '}';
     }
 }

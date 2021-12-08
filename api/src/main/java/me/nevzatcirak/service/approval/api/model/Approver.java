@@ -8,9 +8,18 @@ import java.io.Serializable;
  * Created by ncirak at 06/12/2021
  */
 public class Approver implements Serializable {
+    private String id;
     private Integer sequenceNumber;
     private String username;
     private ApprovalProcessState status;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public Integer getSequenceNumber() {
         return sequenceNumber;

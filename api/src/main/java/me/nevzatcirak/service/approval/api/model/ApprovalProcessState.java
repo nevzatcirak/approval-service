@@ -16,6 +16,14 @@ public enum ApprovalProcessState {
         this.value = value;
     }
 
+    public static ApprovalProcessState valueOf(int val) {
+        for (ApprovalProcessState state : values()) {
+            if (state.value == val)
+                return state;
+        }
+        return null;
+    }
+
     public int value() {
         return value;
     }

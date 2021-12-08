@@ -34,7 +34,7 @@ public interface Converter<Model, Document> {
         return documentList;
     }
 
-    default Set<Model> toModelSet(Collection<Document> documents) {
+    default Set<Model> toModelSet(Set<Document> documents) {
         if (Objects.isNull(documents)) {
             return null;
         }
@@ -45,7 +45,7 @@ public interface Converter<Model, Document> {
         return modelSet;
     }
 
-    default Set<Document> toDocumentSet(Collection<Model> models) {
+    default Set<Document> toDocumentSet(Set<Model> models) {
         if (Objects.isNull(models)) {
             return null;
         }

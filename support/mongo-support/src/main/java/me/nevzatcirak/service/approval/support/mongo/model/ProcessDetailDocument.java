@@ -25,13 +25,13 @@ public class ProcessDetailDocument implements Serializable {
     private String username;
 
     @Field("status")
-    private String status;
+    private Integer status;
 
     public ProcessDetailDocument() {
     }
 
     @PersistenceConstructor
-    public ProcessDetailDocument(@Value("#root.seqNo ?: 1") final Integer sequenceNumber, final String username, final String status) {
+    public ProcessDetailDocument(@Value("#root.seqNo ?: 1") final Integer sequenceNumber, final String username, final Integer status) {
         this.sequenceNumber = sequenceNumber;
         this.username = username;
         this.status = status;
@@ -61,11 +61,11 @@ public class ProcessDetailDocument implements Serializable {
         this.username = username;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }

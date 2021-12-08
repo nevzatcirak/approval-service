@@ -1,15 +1,17 @@
 package me.nevzatcirak.service.approval.support.mongo.bridge;
 
+import me.nevzatcirak.service.approval.api.exception.ApprovalProcessNotFoundException;
+import me.nevzatcirak.service.approval.api.exception.DuplicationException;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
 import me.nevzatcirak.service.approval.api.model.Approver;
 import me.nevzatcirak.service.approval.api.repository.ProcessRepository;
 import me.nevzatcirak.service.approval.support.mongo.converter.ProcessConverter;
-import me.nevzatcirak.service.approval.support.mongo.converter.ProcessDetailConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import me.nevzatcirak.service.approval.support.mongo.model.ProcessDocument;
+import me.nevzatcirak.service.approval.support.mongo.repository.ProcessMongoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 import java.util.Set;
 
@@ -21,26 +23,46 @@ import java.util.Set;
 @Repository
 public class ProcessMongoRepositoryBridge implements ProcessRepository {
     private ProcessConverter processConverter;
-    private ProcessDetailConverter detailConverter;
+    private ProcessMongoRepository processMongoRepository;
 
     @Override
     public ApprovalProcess save(ApprovalProcess approvalProcess) {
-        return null;
+        Assert.notNull(approvalProcess, "Wanted to save approval process instance must not be null.");
+        Assert.notNull(approvalProcess.getDetail(), "Wanted to save approval process approvers must not be null.");
+        ProcessDocument document = processConverter.toDocument(approvalProcess);
+        processMongoRepository.findByDocumentIdAndDocumentType(
+                document.getDocumentId(), document.getDocumentType()).orElseThrow(() ->
+                new DuplicationException("Process already is exist, which has documentId=" + approvalProcess.getDocumentId() +
+                        ", documentType=" + approvalProcess.getDocumentType()));
+        ProcessDocument savedDocument = processMongoRepository.save(document);
+        return processConverter.toModel(savedDocument);
     }
 
     @Override
     public ApprovalProcess update(ApprovalProcess approvalProcess) {
-        return null;
+        Assert.notNull(approvalProcess, "Wanted to update approval process instance must not be null.");
+        Assert.notNull(approvalProcess.getDetail(), "Wanted to update approval process approvers must not be null.");
+        ProcessDocument document = processConverter.toDocument(approvalProcess);
+        ProcessDocument savedDocument = processMongoRepository.save(document);
+        return processConverter.toModel(savedDocument);
     }
 
     @Override
     public ApprovalProcess findBy(String documentId, String documentType) {
-        return null;
+        return processConverter.toModel(
+                processMongoRepository.findByDocumentIdAndDocumentType(documentId, documentType)
+                        .orElseThrow(() ->
+                                new ApprovalProcessNotFoundException(
+                                        "Approval process could not be found, which is defined in documentId=" + documentId + ", documentType=" + documentType
+                                ))
+        );
     }
 
     @Override
     public ApprovalProcess findBy(String processId) {
-        return null;
+        return processConverter.toModel(processMongoRepository.findById(processId)
+                .orElseThrow(()
+                        -> new ApprovalProcessNotFoundException("Approval process could not be found, which is defined in processId=" + processId)));
     }
 
     @Override
@@ -69,12 +91,12 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
     }
 
     @Autowired
-    public void setProcessConverter(ProcessConverter converter) {
+    private void setProcessConverter(ProcessConverter converter) {
         this.processConverter = converter;
     }
 
     @Autowired
-    public void setProcessDetailConverter(ProcessDetailConverter detailConverter) {
-        this.detailConverter = detailConverter;
+    private void setProcessMongoRepository(ProcessMongoRepository processMongoRepository) {
+        this.processMongoRepository = processMongoRepository;
     }
 }
