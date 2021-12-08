@@ -2,7 +2,9 @@ package me.nevzatcirak.service.approval.support.mongo.converter;
 
 import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
 import me.nevzatcirak.service.approval.api.model.Approver;
+import me.nevzatcirak.service.approval.support.mongo.SequenceGenerator;
 import me.nevzatcirak.service.approval.support.mongo.model.ProcessDetailDocument;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -17,10 +19,12 @@ import java.util.Set;
  */
 @Component
 public class ProcessDetailConverter implements Converter<Approver, ProcessDetailDocument> {
+    private SequenceGenerator sequenceGenerator;
 
     @Override
     public Approver toModel(ProcessDetailDocument processDetailDocument) {
         return new Approver()
+                .setId(processDetailDocument.getId())
                 .setUsername(processDetailDocument.getUsername())
                 .setSequenceNumber(processDetailDocument.getSequenceNumber())
                 .setStatus(ApprovalProcessState.valueOf(processDetailDocument.getStatus()));
@@ -32,7 +36,9 @@ public class ProcessDetailConverter implements Converter<Approver, ProcessDetail
         document.setUsername(approver.getUsername());
         document.setStatus(approver.getStatus().value());
         document.setSequenceNumber(approver.getSequenceNumber());
-        if (Objects.nonNull(approver.getId()))
+        if (Objects.isNull(approver.getId()))
+            document.setId(sequenceGenerator.generateIdSequence(ProcessDetailDocument.SEQUENCE_NAME));
+        else
             document.setId(approver.getId());
         return document;
     }
@@ -55,5 +61,10 @@ public class ProcessDetailConverter implements Converter<Approver, ProcessDetail
     @Override
     public Set<ProcessDetailDocument> toDocumentSet(Set<Approver> approvers) {
         return Converter.super.toDocumentSet(approvers);
+    }
+
+    @Autowired
+    private void setSequenceGenerator(SequenceGenerator sequenceGenerator) {
+        this.sequenceGenerator = sequenceGenerator;
     }
 }

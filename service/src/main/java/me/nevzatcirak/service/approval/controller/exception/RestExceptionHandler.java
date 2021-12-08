@@ -22,19 +22,19 @@ public class RestExceptionHandler {
 
     @ExceptionHandler({ApprovalProcessNotFoundException.class, ApproverNotFoundException.class})
     public ResponseEntity<String> handleApprovalDataNotFoundException(RuntimeException e) {
-        logger.error("Exception : ", e);
+        logger.error("Exception Message: " + e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
     @ExceptionHandler({IllegalArgumentException.class})
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
-        logger.error("Exception : ", e);
+        logger.error("Exception Message: ", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
 
     @ExceptionHandler({RuntimeException.class})
     public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
-        logger.error("Exception : ", e);
+        logger.error("Exception Message: ", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
 }

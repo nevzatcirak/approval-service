@@ -17,3 +17,4 @@ spring:
       username: infra
       password: infra
       authentication-database: admin
+      auto-index-creation: true

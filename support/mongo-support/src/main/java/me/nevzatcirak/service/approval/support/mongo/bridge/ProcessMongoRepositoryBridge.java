@@ -6,13 +6,19 @@ import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
 import me.nevzatcirak.service.approval.api.model.Approver;
 import me.nevzatcirak.service.approval.api.repository.ProcessRepository;
+import me.nevzatcirak.service.approval.support.mongo.SequenceGenerator;
 import me.nevzatcirak.service.approval.support.mongo.converter.ProcessConverter;
+import me.nevzatcirak.service.approval.support.mongo.model.ProcessDetailDocument;
 import me.nevzatcirak.service.approval.support.mongo.model.ProcessDocument;
+import me.nevzatcirak.service.approval.support.mongo.repository.ProcessDetailMongoRepository;
 import me.nevzatcirak.service.approval.support.mongo.repository.ProcessMongoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -24,16 +30,21 @@ import java.util.Set;
 public class ProcessMongoRepositoryBridge implements ProcessRepository {
     private ProcessConverter processConverter;
     private ProcessMongoRepository processMongoRepository;
+    private ProcessDetailMongoRepository processDetailMongoRepository;
 
     @Override
     public ApprovalProcess save(ApprovalProcess approvalProcess) {
         Assert.notNull(approvalProcess, "Wanted to save approval process instance must not be null.");
         Assert.notNull(approvalProcess.getDetail(), "Wanted to save approval process approvers must not be null.");
         ProcessDocument document = processConverter.toDocument(approvalProcess);
-        processMongoRepository.findByDocumentIdAndDocumentType(
-                document.getDocumentId(), document.getDocumentType()).orElseThrow(() ->
-                new DuplicationException("Process already is exist, which has documentId=" + approvalProcess.getDocumentId() +
-                        ", documentType=" + approvalProcess.getDocumentType()));
+        Optional<ProcessDocument> existedProcess = processMongoRepository.findByDocumentIdAndDocumentType(
+                document.getDocumentId(), document.getDocumentType());
+        if (existedProcess.isPresent())
+            throw new DuplicationException("Process already is exist, which has documentId=" + approvalProcess.getDocumentId() +
+                    ", documentType=" + approvalProcess.getDocumentType());
+        Set<ProcessDetailDocument> processDetailDocuments = new HashSet<>(processDetailMongoRepository
+                .saveAll(document.getDetails()));
+        document.setDetails(processDetailDocuments);
         ProcessDocument savedDocument = processMongoRepository.save(document);
         return processConverter.toModel(savedDocument);
     }
@@ -86,6 +97,15 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
     }
 
     @Override
+    public Set<ApprovalProcess> findAllBy(String documentType) {
+        return processConverter.toModelSet(processMongoRepository.findAllByDocumentType(documentType)
+                .orElseThrow(() ->
+                        new ApprovalProcessReadException(
+                                "Approval processes could not be read, which is defined in documentType=" + documentType
+                        )));
+    }
+
+    @Override
     public Approver findProcessNextApprover(String documentId, String documentType) {
         /*return processConverter.toModel(processMongoRepository.findNextApproverByDocumentIdAndType(documentId, documentType)
                 .orElseThrow(() ->
@@ -114,5 +134,10 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
     @Autowired
     private void setProcessMongoRepository(ProcessMongoRepository processMongoRepository) {
         this.processMongoRepository = processMongoRepository;
+    }
+
+    @Autowired
+    private void setProcessDetailMongoRepository(ProcessDetailMongoRepository processDetailMongoRepository) {
+        this.processDetailMongoRepository = processDetailMongoRepository;
     }
 }

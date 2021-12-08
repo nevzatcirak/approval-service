@@ -63,6 +63,15 @@ public interface ProcessRepository {
      */
     Set<ApprovalProcess> findAllBy(String documentType, ApprovalProcessState state);
 
+
+    /**
+     * Retrieves data by filtering documentType from related database
+     *
+     * @param documentType
+     * @return Found Set of ApprovalProcess Object
+     */
+    Set<ApprovalProcess> findAllBy(String documentType);
+
     /**
      * Retrieves next approver data of process by using documentId and documentType. If Last approver approved or rejected
      * process, next approver's status field will be filled as APPROVED or REJECTED. Otherwise, that field will be filled as

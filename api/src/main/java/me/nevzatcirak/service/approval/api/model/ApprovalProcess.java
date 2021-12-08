@@ -9,17 +9,17 @@ import java.util.Set;
  * Created by ncirak at 06/12/2021
  */
 public class ApprovalProcess implements Serializable {
-    private String id;
+    private Long id;
     private String documentType;
     private String documentId;
     private ApprovalProcessState status;
     private Set<Approver> detail;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public ApprovalProcess setId(String id) {
+    public ApprovalProcess setId(Long id) {
         this.id = id;
         return this;
     }

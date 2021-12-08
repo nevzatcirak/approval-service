@@ -74,7 +74,11 @@ public class ProcessCoreService implements ProcessService {
 
     @Override
     public Set<ApprovalProcess> getAllByFilteringStatus(String documentType, ApprovalProcessState processState) {
-        Set<ApprovalProcess> approvalProcessSet = processRepository.findAllBy(documentType, processState);
+        Set<ApprovalProcess> approvalProcessSet;
+        if (Objects.isNull(processState))
+            approvalProcessSet = processRepository.findAllBy(documentType);
+        else
+            approvalProcessSet = processRepository.findAllBy(documentType, processState);
         if (Objects.isNull(approvalProcessSet)) {
             throw new ApprovalProcessNotFoundException("Not found approval process object by using documentType: " + documentType);
         }

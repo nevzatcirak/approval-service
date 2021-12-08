@@ -3,6 +3,7 @@ package me.nevzatcirak.service.approval.support.mongo.model;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -18,8 +19,11 @@ import java.io.Serializable;
  */
 @Document(collection = "approval-process-detail")
 public class ProcessDetailDocument implements Serializable {
+    @Transient
+    public static final String SEQUENCE_NAME = "approval_process_detail_sequence";
+
     @Id
-    private String id;
+    private Long id;
 
     @Field("sequenceNumber")
     private Integer sequenceNumber;
@@ -40,11 +44,11 @@ public class ProcessDetailDocument implements Serializable {
         this.status = status;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -75,7 +79,7 @@ public class ProcessDetailDocument implements Serializable {
     @Override
     public String toString() {
         return "ProcessDetailDocument{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", sequenceNumber=" + sequenceNumber +
                 ", username='" + username + '\'' +
                 ", status=" + status +

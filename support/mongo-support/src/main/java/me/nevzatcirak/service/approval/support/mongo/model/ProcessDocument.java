@@ -1,7 +1,7 @@
 package me.nevzatcirak.service.approval.support.mongo.model;
 
-import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.IndexDirection;
@@ -20,12 +20,14 @@ import java.util.Set;
  */
 @Document(collection = "approval-process")
 @CompoundIndexes({
-        @CompoundIndex(name = "document_type_id", def = "{'documentType': 1, 'documentId':1}"),
-        @CompoundIndex(name = "id_details", def = "{'id': 1, 'details.status': 1}"),
+        @CompoundIndex(name = "document_type_id", def = "{'documentType': 1, 'documentId':1}")
 })
 public class ProcessDocument implements Serializable {
+    @Transient
+    public static final String SEQUENCE_NAME = "approval_process_sequence";
+
     @Id
-    private String id;
+    private Long id;
 
     @Field("documentType")
     private String documentType;
@@ -44,11 +46,11 @@ public class ProcessDocument implements Serializable {
     public ProcessDocument() {
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

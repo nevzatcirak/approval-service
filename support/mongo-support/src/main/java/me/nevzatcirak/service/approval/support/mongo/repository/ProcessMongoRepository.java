@@ -24,5 +24,9 @@ public interface ProcessMongoRepository extends MongoRepository<ProcessDocument,
             "'documentId':1, 'status':1}")
     Optional<Set<ProcessDocument>> findAllByFilteringStateAndDocument(String documentType, int state);
 
+    @Query(value = "{'documentType' : ?0}", fields = "{'id':1, 'documentType':1, " +
+            "'documentId':1, 'status':1}")
+    Optional<Set<ProcessDocument>> findAllByDocumentType(String documentType);
+
     //Optional<ProcessDocument> findNextApprover(String processId);
 }

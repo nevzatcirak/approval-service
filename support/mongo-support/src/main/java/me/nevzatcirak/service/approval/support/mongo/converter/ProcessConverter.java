@@ -2,6 +2,7 @@ package me.nevzatcirak.service.approval.support.mongo.converter;
 
 import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
+import me.nevzatcirak.service.approval.support.mongo.SequenceGenerator;
 import me.nevzatcirak.service.approval.support.mongo.model.ProcessDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import java.util.Set;
 @Component
 public class ProcessConverter implements Converter<ApprovalProcess, ProcessDocument> {
     private ProcessDetailConverter detailConverter;
+    private SequenceGenerator sequenceGenerator;
 
     @Override
     public ApprovalProcess toModel(ProcessDocument processDocument) {
@@ -37,7 +39,9 @@ public class ProcessConverter implements Converter<ApprovalProcess, ProcessDocum
         document.setDocumentId(approvalProcess.getDocumentId());
         document.setDocumentType(approvalProcess.getDocumentType());
         document.setDetails(detailConverter.toDocumentSet(approvalProcess.getDetail()));
-        if (Objects.nonNull(approvalProcess.getId()))
+        if (Objects.isNull(approvalProcess.getId()))
+            document.setId(sequenceGenerator.generateIdSequence(ProcessDocument.SEQUENCE_NAME));
+        else
             document.setId(approvalProcess.getId());
         return document;
     }
@@ -65,5 +69,10 @@ public class ProcessConverter implements Converter<ApprovalProcess, ProcessDocum
     @Autowired
     public void setDetailConverter(ProcessDetailConverter converter) {
         this.detailConverter = converter;
+    }
+
+    @Autowired
+    private void setSequenceGenerator(SequenceGenerator sequenceGenerator) {
+        this.sequenceGenerator = sequenceGenerator;
     }
 }

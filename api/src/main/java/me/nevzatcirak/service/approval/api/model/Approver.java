@@ -8,17 +8,18 @@ import java.io.Serializable;
  * Created by ncirak at 06/12/2021
  */
 public class Approver implements Serializable {
-    private String id;
+    private Long id;
     private Integer sequenceNumber;
     private String username;
     private ApprovalProcessState status;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public Approver setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public Integer getSequenceNumber() {
@@ -48,10 +49,11 @@ public class Approver implements Serializable {
         return this;
     }
 
+
     @Override
     public String toString() {
         return "Approver{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", sequenceNumber=" + sequenceNumber +
                 ", username='" + username + '\'' +
                 ", status=" + status +
