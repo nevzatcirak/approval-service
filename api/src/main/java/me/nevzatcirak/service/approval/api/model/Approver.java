@@ -47,4 +47,14 @@ public class Approver implements Serializable {
         this.status = status;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "Approver{" +
+                "id='" + id + '\'' +
+                ", sequenceNumber=" + sequenceNumber +
+                ", username='" + username + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

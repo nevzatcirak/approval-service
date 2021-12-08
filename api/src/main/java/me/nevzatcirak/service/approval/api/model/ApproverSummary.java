@@ -26,4 +26,12 @@ public class ApproverSummary implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    @Override
+    public String toString() {
+        return "ApproverSummary{" +
+                "sequenceNumber=" + sequenceNumber +
+                ", username='" + username + '\'' +
+                '}';
+    }
 }

@@ -68,4 +68,14 @@ public class ProcessDetailDocument implements Serializable {
     public void setStatus(Integer status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "ProcessDetailDocument{" +
+                "id='" + id + '\'' +
+                ", sequenceNumber=" + sequenceNumber +
+                ", username='" + username + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }
