@@ -57,21 +57,11 @@ public interface ProcessService {
     /**
      * Gets process list by filtering final status
      *
-     * @param documentId
      * @param documentType
      * @param processState
      * @return Set<ApprovalProcess>
      */
-    Set<ApprovalProcess> getAllByFilteringStatus(String documentId, String documentType, ApprovalProcessState processState);
-
-    /**
-     * Gets process list by filtering final status
-     *
-     * @param processId
-     * @param processState
-     * @return Set<ApprovalProcess>
-     */
-    Set<ApprovalProcess> getAllByFilteringStatus(String processId, ApprovalProcessState processState);
+    Set<ApprovalProcess> getAllByFilteringStatus(String documentType, ApprovalProcessState processState);
 
     /**
      * Gets next approver data of defined process

@@ -73,19 +73,10 @@ public class ProcessCoreService implements ProcessService {
     }
 
     @Override
-    public Set<ApprovalProcess> getAllByFilteringStatus(String documentId, String documentType, ApprovalProcessState processState) {
-        Set<ApprovalProcess> approvalProcessSet = processRepository.findAllBy(documentId, documentType, processState);
+    public Set<ApprovalProcess> getAllByFilteringStatus(String documentType, ApprovalProcessState processState) {
+        Set<ApprovalProcess> approvalProcessSet = processRepository.findAllBy(documentType, processState);
         if (Objects.isNull(approvalProcessSet)) {
-            throw new ApprovalProcessNotFoundException("Not found approval process object by using documentId: " + documentId + ", documentType: " + documentType);
-        }
-        return approvalProcessSet;
-    }
-
-    @Override
-    public Set<ApprovalProcess> getAllByFilteringStatus(String processId, ApprovalProcessState processState) {
-        Set<ApprovalProcess> approvalProcessSet = processRepository.findAllBy(processId, processState);
-        if (Objects.isNull(approvalProcessSet)) {
-            throw new ApprovalProcessNotFoundException("Not found approval process object by using processId: " + processId);
+            throw new ApprovalProcessNotFoundException("Not found approval process object by using documentType: " + documentType);
         }
         return approvalProcessSet;
     }
@@ -107,6 +98,7 @@ public class ProcessCoreService implements ProcessService {
     }
 
     private ApprovalProcess updateProcess(ApprovalProcess process, String username, ApprovalProcessState status) {
+        // processRepository.findProcessNextApprover(process.getId()) @TODO Check username is next appprover
         for (Approver detail : process.getDetail()) {
             if (detail.getUsername().equals(username)) {
                 process.setStatus(status);

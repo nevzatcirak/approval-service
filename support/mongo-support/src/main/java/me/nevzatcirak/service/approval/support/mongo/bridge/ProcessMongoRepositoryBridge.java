@@ -1,6 +1,6 @@
 package me.nevzatcirak.service.approval.support.mongo.bridge;
 
-import me.nevzatcirak.service.approval.api.exception.ApprovalProcessNotFoundException;
+import me.nevzatcirak.service.approval.api.exception.ApprovalProcessReadException;
 import me.nevzatcirak.service.approval.api.exception.DuplicationException;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
@@ -52,8 +52,9 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
         return processConverter.toModel(
                 processMongoRepository.findByDocumentIdAndDocumentType(documentId, documentType)
                         .orElseThrow(() ->
-                                new ApprovalProcessNotFoundException(
-                                        "Approval process could not be found, which is defined in documentId=" + documentId + ", documentType=" + documentType
+                                new ApprovalProcessReadException(
+                                        "Approval process could not be read, which is defined in documentId=" +
+                                                documentId + ", documentType=" + documentType
                                 ))
         );
     }
@@ -62,31 +63,46 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
     public ApprovalProcess findBy(String processId) {
         return processConverter.toModel(processMongoRepository.findById(processId)
                 .orElseThrow(()
-                        -> new ApprovalProcessNotFoundException("Approval process could not be found, which is defined in processId=" + processId)));
+                        -> new ApprovalProcessReadException("Approval process could not be read, which is defined in processId=" + processId)));
     }
 
     @Override
     public Set<ApprovalProcess> findAllBy(String documentType, Set<String> documentIds) {
-        return null;
+        return processConverter.toModelSet(processMongoRepository.findAllByDocumentTypeAndIdList(documentType, documentIds)
+                .orElseThrow(() ->
+                        new ApprovalProcessReadException(
+                                "Approval process could not be read, which is defined in documentType=" + documentType +
+                                        ", documentIdList=" + String.join(",", documentIds)
+                        )));
     }
 
     @Override
-    public Set<ApprovalProcess> findAllBy(String documentId, String documentType, ApprovalProcessState state) {
-        return null;
-    }
-
-    @Override
-    public Set<ApprovalProcess> findAllBy(String processId, ApprovalProcessState state) {
-        return null;
+    public Set<ApprovalProcess> findAllBy(String documentType, ApprovalProcessState state) {
+        return processConverter.toModelSet(processMongoRepository.findAllByFilteringStateAndDocument(documentType, state.value())
+                .orElseThrow(() ->
+                        new ApprovalProcessReadException(
+                                "Approval processes could not be read, which is defined in documentType=" + documentType
+                        )));
     }
 
     @Override
     public Approver findProcessNextApprover(String documentId, String documentType) {
+        /*return processConverter.toModel(processMongoRepository.findNextApproverByDocumentIdAndType(documentId, documentType)
+                .orElseThrow(() ->
+                        new ApprovalProcessReadException(
+                                "Approval processes could not be read, which is defined in documentId=" +
+                                        documentId + ", documentType=" + documentType
+                        )));*/
         return null;
     }
 
     @Override
     public Approver findProcessNextApprover(String processId) {
+        /*return processConverter.toModel(processMongoRepository.findNextApproverByDocumentIdAndType(processId)
+                .orElseThrow(() ->
+                        new ApprovalProcessReadException(
+                                "Approval processes could not be read, which is defined in processId=" + processId
+                        )));*/
         return null;
     }
 

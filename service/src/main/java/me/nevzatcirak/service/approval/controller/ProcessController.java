@@ -60,25 +60,13 @@ public interface ProcessController {
      * Gets process list by filtering final status
      *
      * @param type
-     * @param documentId
      * @param status
      * @return List of ApprovalProcess
      */
-    @GetMapping("/state/{type}/{documentId}/{status}")
+    @GetMapping("/state/{type}/{status}")
     ResponseEntity<?> getApprovalProcesses(@PathVariable String type,
-                                           @PathVariable String documentId,
                                            @PathVariable ProcessRequestState status);
 
-    /**
-     * Gets process list by filtering final status
-     *
-     * @param processId
-     * @param status
-     * @return List of ApprovalProcess
-     */
-    @GetMapping("/state/{processId}/{status}")
-    ResponseEntity<?> getApprovalProcesses(@PathVariable String processId,
-                                           @PathVariable ProcessRequestState status);
 
     /**
      * Gets next approver data of defined process

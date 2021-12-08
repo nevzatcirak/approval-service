@@ -20,19 +20,18 @@ import java.util.Set;
  */
 @Document(collection = "approval-process")
 @CompoundIndexes({
-        @CompoundIndex(name = "document_type_id", def = "{'type': 1, 'docId':1}"),
+        @CompoundIndex(name = "document_type_id", def = "{'documentType': 1, 'documentId':1}"),
         @CompoundIndex(name = "id_details", def = "{'id': 1, 'details.status': 1}"),
-
 })
 public class ProcessDocument implements Serializable {
     @Id
     private String id;
 
-    @Field("type")
+    @Field("documentType")
     private String documentType;
 
     @Indexed(direction = IndexDirection.ASCENDING)
-    @Field("docId")
+    @Field("documentId")
     private String documentId;
 
     @Field("status")

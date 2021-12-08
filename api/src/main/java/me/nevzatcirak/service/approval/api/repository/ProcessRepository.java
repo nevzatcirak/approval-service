@@ -55,23 +55,13 @@ public interface ProcessRepository {
     Set<ApprovalProcess> findAllBy(String documentType, Set<String> documentIds);
 
     /**
-     * Retrieves data by filtering documentId, documentType and process state from related database
+     * Retrieves data by filtering documentType and process state from related database
      *
-     * @param documentId
      * @param documentType
      * @param state
      * @return Found Set of ApprovalProcess Object
      */
-    Set<ApprovalProcess> findAllBy(String documentId, String documentType, ApprovalProcessState state);
-
-    /**
-     * Retrieves data by filtering documentId, documentType and process state from related database
-     *
-     * @param processId
-     * @param state
-     * @return Found Set of ApprovalProcess Object
-     */
-    Set<ApprovalProcess> findAllBy(String processId, ApprovalProcessState state);
+    Set<ApprovalProcess> findAllBy(String documentType, ApprovalProcessState state);
 
     /**
      * Retrieves next approver data of process by using documentId and documentType. If Last approver approved or rejected

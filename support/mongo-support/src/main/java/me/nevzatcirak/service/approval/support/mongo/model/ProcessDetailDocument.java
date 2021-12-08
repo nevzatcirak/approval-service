@@ -3,6 +3,9 @@ package me.nevzatcirak.service.approval.support.mongo.model;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -18,7 +21,7 @@ public class ProcessDetailDocument implements Serializable {
     @Id
     private String id;
 
-    @Field("seqNo")
+    @Field("sequenceNumber")
     private Integer sequenceNumber;
 
     @Field("username")
