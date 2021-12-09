@@ -64,6 +64,19 @@ public class ProcessControllerImpl implements ProcessController {
     }
 
     @Override
+    public ResponseEntity<?> getApprovalProcess(String type, String id) {
+        Assert.notNull(id, "Document id must not be null!");
+        Assert.notNull(type, "Document service type must not be null!");
+        return ResponseEntity.ok(processService.getBy(id, type));
+    }
+
+    @Override
+    public ResponseEntity<?> getApprovalProcess(Long processId) {
+        Assert.notNull(processId, "Process id must not be null!");
+        return ResponseEntity.ok(processService.getBy(processId));
+    }
+
+    @Override
     public ResponseEntity<?> getApprovalProcesses(String type, ProcessRequestState status) {
         Assert.notNull(type, "Document service type must not be null!");
         Assert.notNull(status, "Filter state must not be null!");

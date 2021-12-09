@@ -49,10 +49,25 @@ public class ProcessCoreService implements ProcessService {
         if (Objects.isNull(process)) {
             throw new ApprovalProcessNotFoundException("Not found approval process object by using documentId: " + documentId + ", documentType: " + documentType);
         }
-        ApprovalProcess updatedApprovalProcess = this.updateProcess(process, username, status);
-        if (Objects.nonNull(updatedApprovalProcess))
-            return updatedApprovalProcess;
-        throw new ApproverNotFoundException("Not found an approver username(" + username + ") in related process.");
+        return this.updateProcess(process, username, status);
+    }
+
+    @Override
+    public ApprovalProcess getBy(String documentId, String documentType) {
+        ApprovalProcess process = processRepository.findBy(documentId, documentType);
+        if (Objects.isNull(process)) {
+            throw new ApprovalProcessNotFoundException("Not found approval process object by using documentId: " + documentId + ", documentType: " + documentType);
+        }
+        return process;
+    }
+
+    @Override
+    public ApprovalProcess getBy(Long processId) {
+        ApprovalProcess process = processRepository.findBy(processId);
+        if (Objects.isNull(process)) {
+            throw new ApprovalProcessNotFoundException("Not found approval process object by using processId: " + processId);
+        }
+        return process;
     }
 
     @Override
@@ -61,10 +76,7 @@ public class ProcessCoreService implements ProcessService {
         if (Objects.isNull(process)) {
             throw new ApprovalProcessNotFoundException("Not found approval process object by using processId: " + processId);
         }
-        ApprovalProcess updatedApprovalProcess = this.updateProcess(process, username, status);
-        if (Objects.nonNull(updatedApprovalProcess))
-            return updatedApprovalProcess;
-        throw new ApproverNotFoundException("Not found an approver username(" + username + ") in related process.");
+        return this.updateProcess(process, username, status);
     }
 
     @Override
@@ -112,21 +124,22 @@ public class ProcessCoreService implements ProcessService {
     }
 
     private ApprovalProcess updateProcess(ApprovalProcess process, String username, ApprovalProcessState status) {
-        processRepository.findProcessNextApprover(process.getId());
-        for (Approver detail : process.getDetail()) {
-            if (detail.getUsername().equals(username)) {
-                detail.setStatus(status);
-                detailRepository.update(detail);
-                boolean isAllApproved = process.getDetail().stream().allMatch(approvalDetail
-                        -> approvalDetail.getStatus().equals(ApprovalProcessState.APPROVED));
-                if (status.equals(ApprovalProcessState.REJECTED) || isAllApproved)
-                    process.setStatus(status);
-                else
-                    process.setStatus(ApprovalProcessState.WAITING);
-                return processRepository.update(process);
+        Approver approver = nextApprover(process.getId());
+        if (Objects.nonNull(approver) && approver.getUsername().equals(username))
+            for (Approver detail : process.getDetail()) {
+                if (detail.getUsername().equals(username)) {
+                    detail.setStatus(status);
+                    detailRepository.update(detail);
+                    boolean isAllApproved = process.getDetail().stream().allMatch(approvalDetail
+                            -> approvalDetail.getStatus().equals(ApprovalProcessState.APPROVED));
+                    if (status.equals(ApprovalProcessState.REJECTED) || isAllApproved)
+                        process.setStatus(status);
+                    else
+                        process.setStatus(ApprovalProcessState.WAITING);
+                    return processRepository.update(process);
+                }
             }
-        }
-        return null;
+        throw new ApproverNotFoundException("Not found an approver username(" + username + ") in related process, or approver is not the next approver.");
     }
 
     private Approver findNextApprover(ApprovalProcess process) {

@@ -31,7 +31,7 @@ public interface ProcessController {
      * @param stateDetailUpdateRequest
      * @return ApprovalProcess
      */
-    @PutMapping("/state/update/{type}/{documentId}")
+    @PutMapping("/{type}/{documentId}/update")
     ResponseEntity<?> updateProcessState(@PathVariable String type,
                                          @PathVariable String documentId,
                                          @RequestBody StateDetailUpdateRequest stateDetailUpdateRequest);
@@ -43,7 +43,7 @@ public interface ProcessController {
      * @param stateDetailUpdateRequest
      * @return ApprovalProcess
      */
-    @PutMapping("/state/update/{processId}")
+    @PutMapping("/{processId}/update")
     ResponseEntity<?> updateProcessState(@PathVariable Long processId,
                                          @RequestBody StateDetailUpdateRequest stateDetailUpdateRequest);
 
@@ -63,9 +63,29 @@ public interface ProcessController {
      * @param status
      * @return List of ApprovalProcess
      */
-    @GetMapping("/state/{type}/{status}")
+    @GetMapping("/{type}/{status}")
     ResponseEntity<?> getApprovalProcesses(@PathVariable String type,
                                            @PathVariable ProcessRequestState status);
+
+    /**
+     * Gets process by filtering document id and type
+     *
+     * @param type
+     * @param id
+     * @return List of ApprovalProcess
+     */
+    @GetMapping("/{type}/{id}/state")
+    ResponseEntity<?> getApprovalProcess(@PathVariable String type,
+                                           @PathVariable String id);
+
+    /**
+     * Gets process by filtering processId
+     *
+     * @param processId
+     * @return ApprovalProcess
+     */
+    @GetMapping("/{processId}/state")
+    ResponseEntity<?> getApprovalProcess(@PathVariable Long processId);
 
 
     /**
@@ -75,7 +95,7 @@ public interface ProcessController {
      * @param documentId
      * @return ApproverSummary
      */
-    @GetMapping("/next/approver/{type}/{documentId}")
+    @GetMapping("/{type}/{documentId}/next")
     ResponseEntity<?> getNextApprover(@PathVariable String type,
                                       @PathVariable String documentId);
 
@@ -85,7 +105,7 @@ public interface ProcessController {
      * @param processId
      * @return ApproverSummary
      */
-    @GetMapping("/next/approver/{processId}")
+    @GetMapping("/{processId}/next")
     ResponseEntity<?> getNextApprover(@PathVariable Long processId);
 
 

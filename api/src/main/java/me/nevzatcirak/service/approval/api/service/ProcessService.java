@@ -46,6 +46,23 @@ public interface ProcessService {
     ApprovalProcess update(Long processId, String username, ApprovalProcessState status);
 
     /**
+     * Gets process by filtering document id and type
+     *
+     * @param documentId
+     * @param documentType
+     * @return ApprovalProcess
+     */
+    ApprovalProcess getBy(String documentId, String documentType);
+
+    /**
+     * Gets process by filtering process id
+     *
+     * @param processId
+     * @return ApprovalProcess
+     */
+    ApprovalProcess getBy(Long processId);
+
+    /**
      * Query type statuses by filtering id list
      *
      * @param documentType

@@ -1,6 +1,7 @@
 package me.nevzatcirak.service.approval.controller.exception;
 
 import me.nevzatcirak.service.approval.api.exception.ApprovalProcessNotFoundException;
+import me.nevzatcirak.service.approval.api.exception.ApprovalProcessReadException;
 import me.nevzatcirak.service.approval.api.exception.ApproverNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class RestExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(RestExceptionHandler.class);
 
-    @ExceptionHandler({ApprovalProcessNotFoundException.class, ApproverNotFoundException.class})
+    @ExceptionHandler({
+            ApprovalProcessNotFoundException.class,
+            ApproverNotFoundException.class,
+            ApprovalProcessReadException.class})
     public ResponseEntity<String> handleApprovalDataNotFoundException(RuntimeException e) {
         logger.error("Exception Message: " + e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
