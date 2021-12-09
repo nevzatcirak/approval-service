@@ -1,5 +1,6 @@
 package me.nevzatcirak.service.approval.controller.exception;
 
+import io.swagger.annotations.Api;
 import me.nevzatcirak.service.approval.api.exception.ApprovalProcessNotFoundException;
 import me.nevzatcirak.service.approval.api.exception.ApprovalProcessReadException;
 import me.nevzatcirak.service.approval.api.exception.ApproverNotFoundException;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  */
 @ControllerAdvice
 @Component
+@Api("Approval Process Error Handler Api Documentation")
 public class RestExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(RestExceptionHandler.class);
 
