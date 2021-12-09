@@ -3,6 +3,8 @@ package me.nevzatcirak.service.approval.controller.exception;
 import me.nevzatcirak.service.approval.api.exception.ApprovalProcessNotFoundException;
 import me.nevzatcirak.service.approval.api.exception.ApprovalProcessReadException;
 import me.nevzatcirak.service.approval.api.exception.ApproverNotFoundException;
+import me.nevzatcirak.service.approval.api.exception.DuplicationException;
+import me.nevzatcirak.service.approval.controller.model.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -24,21 +26,25 @@ public class RestExceptionHandler {
     @ExceptionHandler({
             ApprovalProcessNotFoundException.class,
             ApproverNotFoundException.class,
-            ApprovalProcessReadException.class})
-    public ResponseEntity<String> handleApprovalDataNotFoundException(RuntimeException e) {
+            ApprovalProcessReadException.class,
+            DuplicationException.class})
+    public ResponseEntity<?> handleApprovalDataNotFoundException(RuntimeException e) {
         logger.error("Exception Message: " + e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
     }
 
     @ExceptionHandler({IllegalArgumentException.class})
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
+    public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException e) {
         logger.error("Exception Message: " + e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
     }
 
     @ExceptionHandler({RuntimeException.class})
-    public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
+    public ResponseEntity<?> handleRuntimeException(RuntimeException e) {
         logger.error("Exception Message: ", e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
     }
 }

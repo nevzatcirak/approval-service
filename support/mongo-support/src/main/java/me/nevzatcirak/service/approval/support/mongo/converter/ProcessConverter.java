@@ -24,21 +24,25 @@ public class ProcessConverter implements Converter<ApprovalProcess, ProcessDocum
 
     @Override
     public ApprovalProcess toModel(ProcessDocument processDocument) {
+        if(Objects.isNull(processDocument))
+            return null;
         return new ApprovalProcess()
                 .setDocumentId(processDocument.getDocumentId())
                 .setDocumentType(processDocument.getDocumentType())
-                .setDetail(detailConverter.toModelSet(processDocument.getDetails()))
+                .setApprovers(detailConverter.toModelSet(processDocument.getDetails()))
                 .setId(processDocument.getId())
                 .setStatus(ApprovalProcessState.valueOf(processDocument.getStatus()));
     }
 
     @Override
     public ProcessDocument toDocument(ApprovalProcess approvalProcess) {
+        if(Objects.isNull(approvalProcess))
+            return null;
         ProcessDocument document = new ProcessDocument();
         document.setStatus(approvalProcess.getStatus().value());
         document.setDocumentId(approvalProcess.getDocumentId());
         document.setDocumentType(approvalProcess.getDocumentType());
-        document.setDetails(detailConverter.toDocumentSet(approvalProcess.getDetail()));
+        document.setDetails(detailConverter.toDocumentSet(approvalProcess.getApprovers()));
         if (Objects.isNull(approvalProcess.getId()))
             document.setId(sequenceGenerator.generateIdSequence(ProcessDocument.SEQUENCE_NAME));
         else

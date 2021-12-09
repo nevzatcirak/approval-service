@@ -71,7 +71,17 @@ public class ProcessControllerImpl implements ProcessController {
         Assert.notNull(queryRequest, "Query status payload must not be null!");
         Assert.notNull(queryRequest.isOnlyWaiting(), "Query status type must not be null!");
         Assert.notNull(queryRequest.getDocumentIds(), "Query status ID list must not be null!");
-        return ResponseEntity.ok(processService.queryStatus(type, queryRequest.isOnlyWaiting(), username, queryRequest.getDocumentIds()));
+        return ResponseEntity.ok(processService.queryStatus(type, queryRequest.isOnlyWaiting(), username, false, queryRequest.getDocumentIds()));
+    }
+
+    @Override
+    public ResponseEntity<?> queryProcessStatusByNextApproverUsername(String type, String username, StatusQueryRequest queryRequest) {
+        Assert.notNull(type, "Document service type must not be null!");
+        Assert.hasLength(username, "Username must not be empty!");
+        Assert.notNull(queryRequest, "Query status payload must not be null!");
+        Assert.notNull(queryRequest.isOnlyWaiting(), "Query status type must not be null!");
+        Assert.notNull(queryRequest.getDocumentIds(), "Query status ID list must not be null!");
+        return ResponseEntity.ok(processService.queryStatus(type, queryRequest.isOnlyWaiting(), username, true, queryRequest.getDocumentIds()));
     }
 
     @Override
@@ -115,6 +125,7 @@ public class ProcessControllerImpl implements ProcessController {
                 return ApprovalProcessState.APPROVED;
             case rejected:
                 return ApprovalProcessState.REJECTED;
+            case all:
             default:
                 return null;
         }

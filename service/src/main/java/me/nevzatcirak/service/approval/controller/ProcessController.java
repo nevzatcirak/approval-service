@@ -68,6 +68,17 @@ public interface ProcessController {
                                                    @RequestBody StatusQueryRequest queryRequest);
 
     /**
+     * Query type statuses by filtering id list
+     *
+     * @param queryRequest contains document type and set of document ids
+     * @return Set<ApprovalProcess>
+     */
+    @PostMapping("/query/{type}/{username}/next")
+    ResponseEntity<?> queryProcessStatusByNextApproverUsername(@PathVariable String type,
+                                                   @PathVariable String username,
+                                                   @RequestBody StatusQueryRequest queryRequest);
+
+    /**
      * Gets process list by filtering final status
      *
      * @param type

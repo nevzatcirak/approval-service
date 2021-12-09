@@ -27,10 +27,26 @@ public interface ProcessDetailRepository {
     Approver update(Approver approver);
 
     /**
-     * Finds next approver of a process in provided approver ids.
+     * Finds next approver of a process
      *
-     * @param approverIds
+     * @param processId
      * @return Next Approver
      */
-    Approver nextApprover(List<Long> approverIds);
+    Approver nextApprover(Long processId);
+
+    /**
+     * Finds process ids by using username who is next approver
+     *
+     * @param username
+     * @return List of Legit Process Id
+     */
+    List<Long> findProcessIdsByNextApproverUsername(String username);
+
+    /**
+     * Finds process ids by using username
+     *
+     * @param username
+     * @return List of Legit Process Id
+     */
+    List<Long> findProcessIdsByUsername(String username);
 }

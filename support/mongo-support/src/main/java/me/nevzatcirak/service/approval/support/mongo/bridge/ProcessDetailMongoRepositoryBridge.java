@@ -7,13 +7,15 @@ import me.nevzatcirak.service.approval.support.mongo.converter.ProcessDetailConv
 import me.nevzatcirak.service.approval.support.mongo.model.ProcessDetailDocument;
 import me.nevzatcirak.service.approval.support.mongo.repository.ProcessDetailMongoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Nevzat ÇIRAK
@@ -24,6 +26,7 @@ import java.util.Set;
 public class ProcessDetailMongoRepositoryBridge implements ProcessDetailRepository {
     private ProcessDetailConverter detailConverter;
     private ProcessDetailMongoRepository processDetailMongoRepository;
+    private MongoTemplate mongoTemplate;
 
     @Override
     public Approver save(Approver approver) {
@@ -49,12 +52,30 @@ public class ProcessDetailMongoRepositoryBridge implements ProcessDetailReposito
     }
 
     @Override
-    public Approver nextApprover(List<Long> approverIds) {
-        Assert.notNull(approverIds, "Approvers must be provided to find out next approver.");
-        Assert.notEmpty(approverIds, "Approvers must be provided to find out next approver.");
-        Optional<ProcessDetailDocument> nextApprover = processDetailMongoRepository.findNextApprover(approverIds).stream()
-                .findFirst();
-        return nextApprover.map(processDetailDocument -> detailConverter.toModel(processDetailDocument)).orElse(null);
+    public Approver nextApprover(Long processId) {
+        Assert.notNull(processId, "Process id must be provided to find out next approver.");
+        Query query = new Query();
+        query.addCriteria(Criteria.where("active").is(true).and("processId").is(processId)).limit(1);
+        ProcessDetailDocument detailDocs = mongoTemplate.findOne(query, ProcessDetailDocument.class);
+        return detailConverter.toModel(detailDocs);
+    }
+
+    @Override
+    public List<Long> findProcessIdsByNextApproverUsername(String username) {
+        Query query = new Query();
+        query.fields().include("processId");
+        query.addCriteria(Criteria.where("active").is(true).and("username").is(username));
+        List<ProcessDetailDocument> processDetailDocuments = mongoTemplate.find(query, ProcessDetailDocument.class);
+        return processDetailDocuments.stream().map(ProcessDetailDocument::getProcessId).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Long> findProcessIdsByUsername(String username) {
+        Query query = new Query();
+        query.fields().include("processId");
+        query.addCriteria(Criteria.where("username").is(username));
+        List<ProcessDetailDocument> processDetailDocuments = mongoTemplate.find(query, ProcessDetailDocument.class);
+        return processDetailDocuments.stream().map(ProcessDetailDocument::getProcessId).collect(Collectors.toList());
     }
 
     @Autowired
@@ -65,5 +86,10 @@ public class ProcessDetailMongoRepositoryBridge implements ProcessDetailReposito
     @Autowired
     private void setProcessDetailMongoRepository(ProcessDetailMongoRepository processDetailMongoRepository) {
         this.processDetailMongoRepository = processDetailMongoRepository;
+    }
+
+    @Autowired
+    private void setMongoTemplate(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
     }
 }

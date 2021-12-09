@@ -4,7 +4,6 @@ import me.nevzatcirak.service.approval.api.exception.ApprovalProcessReadExceptio
 import me.nevzatcirak.service.approval.api.exception.DuplicationException;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
-import me.nevzatcirak.service.approval.api.model.Approver;
 import me.nevzatcirak.service.approval.api.repository.ProcessRepository;
 import me.nevzatcirak.service.approval.support.mongo.converter.ProcessConverter;
 import me.nevzatcirak.service.approval.support.mongo.model.ProcessDetailDocument;
@@ -12,11 +11,11 @@ import me.nevzatcirak.service.approval.support.mongo.model.ProcessDocument;
 import me.nevzatcirak.service.approval.support.mongo.repository.ProcessDetailMongoRepository;
 import me.nevzatcirak.service.approval.support.mongo.repository.ProcessMongoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,18 +29,22 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
     private ProcessConverter processConverter;
     private ProcessMongoRepository processMongoRepository;
     private ProcessDetailMongoRepository processDetailMongoRepository;
-    private MongoTemplate mongoTemplate;
 
     @Override
     public ApprovalProcess save(ApprovalProcess approvalProcess) {
         Assert.notNull(approvalProcess, "Wanted to save approval process instance must not be null.");
-        Assert.notNull(approvalProcess.getDetail(), "Wanted to save approval process approvers must not be null.");
+        Assert.notNull(approvalProcess.getApprovers(), "Wanted to save approval process approvers must not be null.");
         ProcessDocument document = processConverter.toDocument(approvalProcess);
         Optional<ProcessDocument> existedProcess = processMongoRepository.findByDocumentIdAndDocumentType(
                 document.getDocumentId(), document.getDocumentType());
         if (existedProcess.isPresent())
             throw new DuplicationException("Process already is exist, which has documentId=" + approvalProcess.getDocumentId() +
                     ", documentType=" + approvalProcess.getDocumentType());
+        document.getDetails().forEach(detail -> {
+            if(detail.getSequenceNumber().equals(1))
+                detail.setActive(true);
+            detail.setProcessId(document.getId());
+        });
         Set<ProcessDetailDocument> processDetailDocuments = new HashSet<>(processDetailMongoRepository
                 .saveAll(document.getDetails()));
         document.setDetails(processDetailDocuments);
@@ -52,7 +55,7 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
     @Override
     public ApprovalProcess update(ApprovalProcess approvalProcess) {
         Assert.notNull(approvalProcess, "Wanted to update approval process instance must not be null.");
-        Assert.notNull(approvalProcess.getDetail(), "Wanted to update approval process approvers must not be null.");
+        Assert.notNull(approvalProcess.getApprovers(), "Wanted to update approval process approvers must not be null.");
         ProcessDocument document = processConverter.toDocument(approvalProcess);
         ProcessDocument savedDocument = processMongoRepository.save(document);
         return processConverter.toModel(savedDocument);
@@ -88,7 +91,7 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
     }
 
     @Override
-    public Set<ApprovalProcess> findAllByWaitingStatus(String documentType, ApprovalProcessState status, Set<String> documentIds) {
+    public Set<ApprovalProcess> findAllBy(String documentType, ApprovalProcessState status, Set<String> documentIds) {
         return processConverter.toModelSet(processMongoRepository.findAllByDocumentTypeStatusAndIdList(documentType, status.value(), documentIds)
                 .orElseThrow(() ->
                         new ApprovalProcessReadException(
@@ -102,7 +105,7 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
         return processConverter.toModelSet(processMongoRepository.findAllByFilteringStateAndDocument(documentType, state.value())
                 .orElseThrow(() ->
                         new ApprovalProcessReadException(
-                                "Approval processes could not be read, which is defined in documentType=" + documentType
+                                "Approval processes could not be read, which is defined in documentType=" + documentType + ", State=" + state
                         )));
     }
 
@@ -116,24 +119,21 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
     }
 
     @Override
-    public Approver findProcessNextApprover(String documentId, String documentType) {
-        /*return processConverter.toModel(processMongoRepository.findNextApproverByDocumentIdAndType(documentId, documentType)
+    public Set<ApprovalProcess> findAllBy(String documentType, List<Long> legitProcessIds) {
+        return processConverter.toModelSet(processMongoRepository.findAllByDocumentTypeAndProcessIds(documentType, legitProcessIds)
                 .orElseThrow(() ->
                         new ApprovalProcessReadException(
-                                "Approval processes could not be read, which is defined in documentId=" +
-                                        documentId + ", documentType=" + documentType
-                        )));*/
-        return null;
+                                "Approval processes could not be read, which is defined in documentType=" + documentType
+                        )));
     }
 
     @Override
-    public Approver findProcessNextApprover(Long processId) {
-        /*return processConverter.toModel(processMongoRepository.findNextApproverById(processId)
+    public Set<ApprovalProcess> findAllBy(String documentType, Set<String> documentIds, List<Long> legitProcessIds) {
+        return processConverter.toModelSet(processMongoRepository.findAllByDocumentTypeIdsAndProcessIds(documentType, documentIds, legitProcessIds)
                 .orElseThrow(() ->
                         new ApprovalProcessReadException(
-                                "Approval processes could not be read, which is defined in processId=" + processId
-                        )));*/
-        return null;
+                                "Approval processes could not be read, which is defined in documentType=" + documentType
+                        )));
     }
 
     @Autowired
@@ -149,10 +149,5 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
     @Autowired
     private void setProcessDetailMongoRepository(ProcessDetailMongoRepository processDetailMongoRepository) {
         this.processDetailMongoRepository = processDetailMongoRepository;
-    }
-
-    @Autowired
-    private void setMongoTemplate(MongoTemplate mongoTemplate) {
-        this.mongoTemplate = mongoTemplate;
     }
 }

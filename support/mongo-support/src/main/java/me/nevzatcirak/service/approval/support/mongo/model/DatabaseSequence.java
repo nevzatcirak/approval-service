@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 
-@Document(collection = "database_sequences")
+@Document(collection = "approval_database_sequences")
 public class DatabaseSequence implements Serializable {
 
     @Id

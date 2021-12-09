@@ -16,7 +16,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Manages approval process core logic
@@ -41,7 +40,7 @@ public class ProcessCoreService implements ProcessService {
                 .setDocumentId(documentId)
                 .setDocumentType(documentType)
                 .setStatus(ApprovalProcessState.WAITING)
-                .setDetail(processDetails);
+                .setApprovers(processDetails);
         return processRepository.save(approvalProcess);
     }
 
@@ -90,17 +89,25 @@ public class ProcessCoreService implements ProcessService {
                     processRepository.findAllBy(documentType);
         else
             approvalProcessSet = onlyWaiting ?
-                    processRepository.findAllByWaitingStatus(documentType, ApprovalProcessState.WAITING, documentIds) :
+                    processRepository.findAllBy(documentType, ApprovalProcessState.WAITING, documentIds) :
                     processRepository.findAllBy(documentType, documentIds);
-
         if (Objects.isNull(approvalProcessSet))
             throw new ApprovalProcessNotFoundException("Not found any approval process object by using idList = " + String.join(",", documentIds));
         return approvalProcessSet;
     }
 
     @Override
-    public Set<ApprovalProcess> queryStatus(String documentType, Boolean onlyWaiting, String username, Set<String> documentIds) {
-        return null;
+    public Set<ApprovalProcess> queryStatus(String documentType, Boolean onlyWaiting,
+                                            String username, Boolean onlyNextApprover, Set<String> documentIds) {
+        Set<ApprovalProcess> approvalProcessSet;
+        List<Long> legitProcessIds = onlyNextApprover ? detailRepository.findProcessIdsByNextApproverUsername(username) :
+                detailRepository.findProcessIdsByUsername(username);
+        approvalProcessSet = documentIds.isEmpty() ?
+                processRepository.findAllBy(documentType, legitProcessIds) :
+                processRepository.findAllBy(documentType, documentIds, legitProcessIds);
+        if (Objects.isNull(approvalProcessSet))
+            throw new ApprovalProcessNotFoundException("Not found any approval process object by using idList = " + String.join(",", documentIds));
+        return approvalProcessSet;
     }
 
     @Override
@@ -140,12 +147,14 @@ public class ProcessCoreService implements ProcessService {
 
     private ApprovalProcess updateProcess(ApprovalProcess process, String username, ApprovalProcessState status) {
         Approver approver = nextApprover(process.getId());
+        Set<Approver> approvers = process.getApprovers();
         if (Objects.nonNull(approver) && approver.getUsername().equals(username))
-            for (Approver detail : process.getDetail()) {
-                if (detail.getUsername().equals(username)) {
-                    detail.setStatus(status);
-                    detailRepository.update(detail);
-                    boolean isAllApproved = process.getDetail().stream().allMatch(approvalDetail
+            for (Approver currentApprover : approvers) {
+                if (currentApprover.getUsername().equals(username)) {
+                    currentApprover.setStatus(status);
+                    currentApprover.setActive(false);
+                    saveNextApproverActiveStatus(detailRepository.update(currentApprover), approvers);
+                    boolean isAllApproved = approvers.stream().allMatch(approvalDetail
                             -> approvalDetail.getStatus().equals(ApprovalProcessState.APPROVED));
                     if (status.equals(ApprovalProcessState.REJECTED) || isAllApproved)
                         process.setStatus(status);
@@ -157,9 +166,17 @@ public class ProcessCoreService implements ProcessService {
         throw new ApproverNotFoundException("Not found an approver username(" + username + ") in related process, or approver is not the next approver.");
     }
 
+    private void saveNextApproverActiveStatus(Approver current, Set<Approver> approvers) {
+        for (Approver target : approvers) {
+            if (target.getSequenceNumber().equals(current.getSequenceNumber() + 1)) {
+                target.setActive(true);
+                detailRepository.update(target);
+            }
+        }
+    }
+
     private Approver findNextApprover(ApprovalProcess process) {
-        List<Long> approverIds = process.getDetail().stream().map(Approver::getId).collect(Collectors.toList());
-        return detailRepository.nextApprover(approverIds);
+        return detailRepository.nextApprover(process.getId());
     }
 
     @Autowired

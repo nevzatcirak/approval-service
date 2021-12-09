@@ -5,7 +5,6 @@ import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
 import me.nevzatcirak.service.approval.api.model.Approver;
 import me.nevzatcirak.service.approval.api.model.ApproverSummary;
 
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -78,10 +77,11 @@ public interface ProcessService {
      * @param documentType
      * @param onlyWaiting
      * @param username
+     * @param onlyNextApprover
      * @param documentIds
      * @return Set<ApprovalProcess>
      */
-    Set<ApprovalProcess> queryStatus(String documentType, Boolean onlyWaiting, String username, Set<String> documentIds);
+    Set<ApprovalProcess> queryStatus(String documentType, Boolean onlyWaiting, String username, Boolean onlyNextApprover, Set<String> documentIds);
 
     /**
      * Gets process list by filtering final status

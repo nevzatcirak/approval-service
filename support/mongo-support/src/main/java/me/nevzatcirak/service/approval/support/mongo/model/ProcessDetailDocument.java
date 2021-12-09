@@ -4,9 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.index.CompoundIndexes;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -17,13 +14,16 @@ import java.io.Serializable;
  * @mail ncirak@havelsan.com.tr
  * Created by ncirak at 06/12/2021
  */
-@Document(collection = "approval-process-detail")
+@Document(collection = "approval_process_detail")
 public class ProcessDetailDocument implements Serializable {
     @Transient
     public static final String SEQUENCE_NAME = "approval_process_detail_sequence";
 
     @Id
     private Long id;
+
+    @Field("processId")
+    private Long processId;
 
     @Field("sequenceNumber")
     private Integer sequenceNumber;
@@ -33,6 +33,9 @@ public class ProcessDetailDocument implements Serializable {
 
     @Field("status")
     private Integer status;
+
+    @Field("active")
+    private Boolean active;
 
     public ProcessDetailDocument() {
     }
@@ -50,6 +53,14 @@ public class ProcessDetailDocument implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(Long processId) {
+        this.processId = processId;
     }
 
     public Integer getSequenceNumber() {
@@ -76,13 +87,23 @@ public class ProcessDetailDocument implements Serializable {
         this.status = status;
     }
 
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
         return "ProcessDetailDocument{" +
                 "id=" + id +
+                ", processId=" + processId +
                 ", sequenceNumber=" + sequenceNumber +
                 ", username='" + username + '\'' +
                 ", status=" + status +
+                ", active=" + active +
                 '}';
     }
 }

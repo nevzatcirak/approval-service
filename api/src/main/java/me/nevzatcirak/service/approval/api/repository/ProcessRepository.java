@@ -2,8 +2,8 @@ package me.nevzatcirak.service.approval.api.repository;
 
 import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
-import me.nevzatcirak.service.approval.api.model.Approver;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -62,7 +62,7 @@ public interface ProcessRepository {
      * @param documentIds
      * @return Found Set of ApprovalProcess Object
      */
-    Set<ApprovalProcess> findAllByWaitingStatus(String documentType, ApprovalProcessState status, Set<String> documentIds);
+    Set<ApprovalProcess> findAllBy(String documentType, ApprovalProcessState status, Set<String> documentIds);
 
     /**
      * Retrieves data by filtering documentType and process state from related database
@@ -73,7 +73,6 @@ public interface ProcessRepository {
      */
     Set<ApprovalProcess> findAllBy(String documentType, ApprovalProcessState state);
 
-
     /**
      * Retrieves data by filtering documentType from related database
      *
@@ -83,24 +82,19 @@ public interface ProcessRepository {
     Set<ApprovalProcess> findAllBy(String documentType);
 
     /**
-     * Retrieves next approver data of process by using documentId and documentType. If Last approver approved or rejected
-     * process, next approver's status field will be filled as APPROVED or REJECTED. Otherwise, that field will be filled as
-     * WAITING.
-     *
-     * @param documentId
+     * Finds approval process by using type and processIds
      * @param documentType
-     * @return Approver
+     * @param legitProcessIds
+     * @return Approval Process
      */
-    Approver findProcessNextApprover(String documentId, String documentType);
+    Set<ApprovalProcess> findAllBy(String documentType, List<Long> legitProcessIds);
 
     /**
-     * Retrieves next approver data of process by using processId. If Last approver approved or rejected
-     * process, next approver's status field will be filled as APPROVED or REJECTED. Otherwise, that field will be filled as
-     * WAITING.
-     *
-     * @param processId
-     * @return Approver
+     * Finds approval process by using type, documentIds and processIds
+     * @param documentType
+     * @param documentIds
+     * @param legitProcessIds
+     * @return Approval Process
      */
-    Approver findProcessNextApprover(Long processId);
-
+    Set<ApprovalProcess> findAllBy(String documentType, Set<String> documentIds, List<Long> legitProcessIds);
 }

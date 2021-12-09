@@ -13,7 +13,7 @@ public class ApprovalProcess implements Serializable {
     private String documentType;
     private String documentId;
     private ApprovalProcessState status;
-    private Set<Approver> detail;
+    private Set<Approver> approvers;
 
     public Long getId() {
         return id;
@@ -51,12 +51,12 @@ public class ApprovalProcess implements Serializable {
         return this;
     }
 
-    public Set<Approver> getDetail() {
-        return detail;
+    public Set<Approver> getApprovers() {
+        return approvers;
     }
 
-    public ApprovalProcess setDetail(Set<Approver> detail) {
-        this.detail = detail;
+    public ApprovalProcess setApprovers(Set<Approver> approvers) {
+        this.approvers = approvers;
         return this;
     }
 
@@ -67,7 +67,7 @@ public class ApprovalProcess implements Serializable {
                 ", documentType='" + documentType + '\'' +
                 ", documentId='" + documentId + '\'' +
                 ", status=" + status +
-                ", detail=" + detail +
+                ", detail=" + approvers +
                 '}';
     }
 }

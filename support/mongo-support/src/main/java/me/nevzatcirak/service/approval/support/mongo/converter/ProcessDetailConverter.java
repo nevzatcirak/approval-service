@@ -23,19 +23,27 @@ public class ProcessDetailConverter implements Converter<Approver, ProcessDetail
 
     @Override
     public Approver toModel(ProcessDetailDocument processDetailDocument) {
+        if(Objects.isNull(processDetailDocument))
+            return null;
         return new Approver()
                 .setId(processDetailDocument.getId())
+                .setProcessId(processDetailDocument.getProcessId())
                 .setUsername(processDetailDocument.getUsername())
                 .setSequenceNumber(processDetailDocument.getSequenceNumber())
+                .setActive(processDetailDocument.isActive())
                 .setStatus(ApprovalProcessState.valueOf(processDetailDocument.getStatus()));
     }
 
     @Override
     public ProcessDetailDocument toDocument(Approver approver) {
+        if(Objects.isNull(approver))
+            return null;
         ProcessDetailDocument document = new ProcessDetailDocument();
         document.setUsername(approver.getUsername());
         document.setStatus(approver.getStatus().value());
         document.setSequenceNumber(approver.getSequenceNumber());
+        document.setProcessId(approver.getProcessId());
+        document.setActive(approver.isActive());
         if (Objects.isNull(approver.getId()))
             document.setId(sequenceGenerator.generateIdSequence(ProcessDetailDocument.SEQUENCE_NAME));
         else

@@ -18,7 +18,7 @@ import java.util.Set;
  * @mail ncirak@havelsan.com.tr
  * Created by ncirak at 06/12/2021
  */
-@Document(collection = "approval-process")
+@Document(collection = "approval_process")
 @CompoundIndexes({
         @CompoundIndex(name = "document_type_id", def = "{'documentType': 1, 'documentId':1}")
 })

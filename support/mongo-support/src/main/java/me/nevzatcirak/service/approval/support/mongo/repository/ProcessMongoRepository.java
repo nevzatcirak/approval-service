@@ -4,6 +4,7 @@ import me.nevzatcirak.service.approval.support.mongo.model.ProcessDocument;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -27,4 +28,13 @@ public interface ProcessMongoRepository extends MongoRepository<ProcessDocument,
 
     @Query(value = "{'documentType' : ?0}")
     Optional<Set<ProcessDocument>> findAllByDocumentType(String documentType);
+
+    @Query(value = "{'documentType' : ?0, '_id':{'$in': ?1}}")
+    Optional<Set<ProcessDocument>> findAllByDocumentTypeAndProcessIds(String documentType,
+                                                                      List<Long> legitProcessIds);
+
+    @Query(value = "{'documentType' : ?0, 'documentId':{'$in': ?1}, '_id':{'$in': ?2}}")
+    Optional<Set<ProcessDocument>> findAllByDocumentTypeIdsAndProcessIds(String documentType,
+                                                                         Set<String> documentIds,
+                                                                         List<Long> legitProcessIds);
 }
