@@ -43,7 +43,7 @@ public interface ProcessRepository {
      * @param processId
      * @return Found ApprovalProcess Object
      */
-    ApprovalProcess findBy(String processId);
+    ApprovalProcess findBy(Long processId);
 
     /**
      * Retrieves data by using document type and document id set from related database
@@ -91,6 +91,6 @@ public interface ProcessRepository {
      * @param processId
      * @return Approver
      */
-    Approver findProcessNextApprover(String processId);
+    Approver findProcessNextApprover(Long processId);
 
 }

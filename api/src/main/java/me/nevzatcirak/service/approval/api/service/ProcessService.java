@@ -43,7 +43,7 @@ public interface ProcessService {
      * @param status
      * @return ApprovalProcess
      */
-    ApprovalProcess update(String processId, String username, ApprovalProcessState status);
+    ApprovalProcess update(Long processId, String username, ApprovalProcessState status);
 
     /**
      * Query type statuses by filtering id list
@@ -78,5 +78,5 @@ public interface ProcessService {
      * @param processId
      * @return Approver
      */
-    Approver nextApprover(String processId);
+    Approver nextApprover(Long processId);
 }

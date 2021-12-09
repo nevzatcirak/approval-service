@@ -6,18 +6,17 @@ import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
 import me.nevzatcirak.service.approval.api.model.Approver;
 import me.nevzatcirak.service.approval.api.repository.ProcessRepository;
-import me.nevzatcirak.service.approval.support.mongo.SequenceGenerator;
 import me.nevzatcirak.service.approval.support.mongo.converter.ProcessConverter;
 import me.nevzatcirak.service.approval.support.mongo.model.ProcessDetailDocument;
 import me.nevzatcirak.service.approval.support.mongo.model.ProcessDocument;
 import me.nevzatcirak.service.approval.support.mongo.repository.ProcessDetailMongoRepository;
 import me.nevzatcirak.service.approval.support.mongo.repository.ProcessMongoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -31,6 +30,7 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
     private ProcessConverter processConverter;
     private ProcessMongoRepository processMongoRepository;
     private ProcessDetailMongoRepository processDetailMongoRepository;
+    private MongoTemplate mongoTemplate;
 
     @Override
     public ApprovalProcess save(ApprovalProcess approvalProcess) {
@@ -71,7 +71,7 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
     }
 
     @Override
-    public ApprovalProcess findBy(String processId) {
+    public ApprovalProcess findBy(Long processId) {
         return processConverter.toModel(processMongoRepository.findById(processId)
                 .orElseThrow(()
                         -> new ApprovalProcessReadException("Approval process could not be read, which is defined in processId=" + processId)));
@@ -117,8 +117,8 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
     }
 
     @Override
-    public Approver findProcessNextApprover(String processId) {
-        /*return processConverter.toModel(processMongoRepository.findNextApproverByDocumentIdAndType(processId)
+    public Approver findProcessNextApprover(Long processId) {
+        /*return processConverter.toModel(processMongoRepository.findNextApproverById(processId)
                 .orElseThrow(() ->
                         new ApprovalProcessReadException(
                                 "Approval processes could not be read, which is defined in processId=" + processId
@@ -139,5 +139,10 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
     @Autowired
     private void setProcessDetailMongoRepository(ProcessDetailMongoRepository processDetailMongoRepository) {
         this.processDetailMongoRepository = processDetailMongoRepository;
+    }
+
+    @Autowired
+    private void setMongoTemplate(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
     }
 }

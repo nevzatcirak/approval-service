@@ -6,12 +6,15 @@ import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
 import me.nevzatcirak.service.approval.api.model.Approver;
 import me.nevzatcirak.service.approval.api.model.ApproverSummary;
+import me.nevzatcirak.service.approval.api.repository.ProcessDetailRepository;
 import me.nevzatcirak.service.approval.api.repository.ProcessRepository;
 import me.nevzatcirak.service.approval.api.service.ProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Manages approval process core logic
@@ -23,6 +26,7 @@ import java.util.*;
 @Service
 public class ProcessCoreService implements ProcessService {
     private ProcessRepository processRepository;
+    private ProcessDetailRepository detailRepository;
 
     @Override
     public ApprovalProcess create(String documentId, String documentType, Set<ApproverSummary> approvers) {
@@ -52,7 +56,7 @@ public class ProcessCoreService implements ProcessService {
     }
 
     @Override
-    public ApprovalProcess update(String processId, String username, ApprovalProcessState status) {
+    public ApprovalProcess update(Long processId, String username, ApprovalProcessState status) {
         ApprovalProcess process = processRepository.findBy(processId);
         if (Objects.isNull(process)) {
             throw new ApprovalProcessNotFoundException("Not found approval process object by using processId: " + processId);
@@ -87,29 +91,47 @@ public class ProcessCoreService implements ProcessService {
 
     @Override
     public Approver nextApprover(String documentId, String documentType) {
-        Approver approver = processRepository.findProcessNextApprover(documentId, documentType);
-        if (Objects.isNull(approver))
+        ApprovalProcess process = processRepository.findBy(documentId, documentType);
+        if (Objects.isNull(process))
+            throw new ApprovalProcessNotFoundException("Not found approval process object by using documentId=" + documentId + ", documentType=" + documentType);
+        Approver nextApprover = findNextApprover(process);
+        if (Objects.isNull(nextApprover))
             throw new ApproverNotFoundException("Not found an approver in process which is defined by documentId=" + documentId + ", documentType=" + documentType);
-        return approver;
+        return nextApprover;
     }
 
     @Override
-    public Approver nextApprover(String processId) {
-        Approver approver = processRepository.findProcessNextApprover(processId);
-        if (Objects.isNull(approver))
+    public Approver nextApprover(Long processId) {
+        ApprovalProcess process = processRepository.findBy(processId);
+        if (Objects.isNull(process))
+            throw new ApprovalProcessNotFoundException("Not found approval process object by using processId=" + processId);
+        Approver nextApprover = findNextApprover(process);
+        if (Objects.isNull(nextApprover))
             throw new ApproverNotFoundException("Not found an approver in process which is defined by processId=" + processId);
-        return approver;
+        return nextApprover;
     }
 
     private ApprovalProcess updateProcess(ApprovalProcess process, String username, ApprovalProcessState status) {
-        // processRepository.findProcessNextApprover(process.getId()) @TODO Check username is next appprover
+        processRepository.findProcessNextApprover(process.getId());
         for (Approver detail : process.getDetail()) {
             if (detail.getUsername().equals(username)) {
-                process.setStatus(status);
+                detail.setStatus(status);
+                detailRepository.update(detail);
+                boolean isAllApproved = process.getDetail().stream().allMatch(approvalDetail
+                        -> approvalDetail.getStatus().equals(ApprovalProcessState.APPROVED));
+                if (status.equals(ApprovalProcessState.REJECTED) || isAllApproved)
+                    process.setStatus(status);
+                else
+                    process.setStatus(ApprovalProcessState.WAITING);
                 return processRepository.update(process);
             }
         }
         return null;
+    }
+
+    private Approver findNextApprover(ApprovalProcess process) {
+        List<Long> approverIds = process.getDetail().stream().map(Approver::getId).collect(Collectors.toList());
+        return detailRepository.nextApprover(approverIds);
     }
 
     private Map<String, ApprovalProcessState> convertMap(Set<ApprovalProcess> approvalProcessSet) {
@@ -123,5 +145,10 @@ public class ProcessCoreService implements ProcessService {
     @Autowired
     public void setProcessRepository(ProcessRepository processRepository) {
         this.processRepository = processRepository;
+    }
+
+    @Autowired
+    public void setDetailRepository(ProcessDetailRepository detailRepository) {
+        this.detailRepository = detailRepository;
     }
 }

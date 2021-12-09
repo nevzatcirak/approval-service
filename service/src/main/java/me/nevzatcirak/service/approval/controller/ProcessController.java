@@ -44,7 +44,7 @@ public interface ProcessController {
      * @return ApprovalProcess
      */
     @PutMapping("/state/update/{processId}")
-    ResponseEntity<?> updateProcessState(@PathVariable String processId,
+    ResponseEntity<?> updateProcessState(@PathVariable Long processId,
                                          @RequestBody StateDetailUpdateRequest stateDetailUpdateRequest);
 
     /**
@@ -86,7 +86,7 @@ public interface ProcessController {
      * @return ApproverSummary
      */
     @GetMapping("/next/approver/{processId}")
-    ResponseEntity<?> getNextApprover(@PathVariable String processId);
+    ResponseEntity<?> getNextApprover(@PathVariable Long processId);
 
 
 }

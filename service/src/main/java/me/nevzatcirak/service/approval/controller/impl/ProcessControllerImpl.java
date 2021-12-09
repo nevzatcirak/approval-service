@@ -44,7 +44,7 @@ public class ProcessControllerImpl implements ProcessController {
     }
 
     @Override
-    public ResponseEntity<?> updateProcessState(String processId, StateDetailUpdateRequest stateDetailUpdateRequest) {
+    public ResponseEntity<?> updateProcessState(Long processId, StateDetailUpdateRequest stateDetailUpdateRequest) {
         Assert.notNull(processId, "Approval process id must not be null!");
         Assert.notNull(stateDetailUpdateRequest, "Approval process update request must not be null!");
         Assert.notNull(stateDetailUpdateRequest.getUsername(), "Approver username must not be null!");
@@ -78,7 +78,7 @@ public class ProcessControllerImpl implements ProcessController {
     }
 
     @Override
-    public ResponseEntity<?> getNextApprover(String processId) {
+    public ResponseEntity<?> getNextApprover(Long processId) {
         Assert.notNull(processId, "Approval process id must not be null!");
         return ResponseEntity.ok(processService.nextApprover(processId));
     }

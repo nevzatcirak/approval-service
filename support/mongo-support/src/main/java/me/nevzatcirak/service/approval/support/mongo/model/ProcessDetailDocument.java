@@ -38,7 +38,7 @@ public class ProcessDetailDocument implements Serializable {
     }
 
     @PersistenceConstructor
-    public ProcessDetailDocument(@Value("#root.seqNo ?: 1") final Integer sequenceNumber, final String username, final Integer status) {
+    public ProcessDetailDocument(@Value("#root.sequenceNumber ?: 1") final Integer sequenceNumber, final String username, final Integer status) {
         this.sequenceNumber = sequenceNumber;
         this.username = username;
         this.status = status;
