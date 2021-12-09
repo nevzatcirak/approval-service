@@ -51,10 +51,21 @@ public interface ProcessController {
      * Query type statuses by filtering id list
      *
      * @param queryRequest contains document type and set of document ids
-     * @return Map<DocumentId, ProcessState>
+     * @return Set<ApprovalProcess>
      */
-    @PostMapping("/query-status")
-    ResponseEntity<?> queryProcessStatus(@RequestBody StatusQueryRequest queryRequest);
+    @PostMapping("/query/{type}")
+    ResponseEntity<?> queryProcessStatus(@PathVariable String type, @RequestBody StatusQueryRequest queryRequest);
+
+    /**
+     * Query type statuses by filtering id list
+     *
+     * @param queryRequest contains document type and set of document ids
+     * @return Set<ApprovalProcess>
+     */
+    @PostMapping("/query/{type}/{username}")
+    ResponseEntity<?> queryProcessStatusByUsername(@PathVariable String type,
+                                                   @PathVariable String username,
+                                                   @RequestBody StatusQueryRequest queryRequest);
 
     /**
      * Gets process list by filtering final status
@@ -76,7 +87,7 @@ public interface ProcessController {
      */
     @GetMapping("/{type}/{id}/state")
     ResponseEntity<?> getApprovalProcess(@PathVariable String type,
-                                           @PathVariable String id);
+                                         @PathVariable String id);
 
     /**
      * Gets process by filtering processId

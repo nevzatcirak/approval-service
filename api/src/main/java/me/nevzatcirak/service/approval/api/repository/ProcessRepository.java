@@ -55,6 +55,16 @@ public interface ProcessRepository {
     Set<ApprovalProcess> findAllBy(String documentType, Set<String> documentIds);
 
     /**
+     * Retrieves data by using document type and document id set from related database
+     *
+     * @param documentType
+     * @param status
+     * @param documentIds
+     * @return Found Set of ApprovalProcess Object
+     */
+    Set<ApprovalProcess> findAllByWaitingStatus(String documentType, ApprovalProcessState status, Set<String> documentIds);
+
+    /**
      * Retrieves data by filtering documentType and process state from related database
      *
      * @param documentType

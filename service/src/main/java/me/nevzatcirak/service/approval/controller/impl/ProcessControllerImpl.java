@@ -56,24 +56,35 @@ public class ProcessControllerImpl implements ProcessController {
     }
 
     @Override
-    public ResponseEntity<?> queryProcessStatus(StatusQueryRequest queryRequest) {
+    public ResponseEntity<?> queryProcessStatus(String type, StatusQueryRequest queryRequest) {
+        Assert.notNull(type, "Document service type must not be null!");
         Assert.notNull(queryRequest, "Query status payload must not be null!");
-        Assert.notNull(queryRequest.getType(), "Query status type must not be null!");
-        Assert.notNull(queryRequest.getIdList(), "Query status ID list must not be null!");
-        return ResponseEntity.ok(processService.queryStatus(queryRequest.getType(), queryRequest.getIdList()));
+        Assert.notNull(queryRequest.isOnlyWaiting(), "Query status type must not be null!");
+        Assert.notNull(queryRequest.getDocumentIds(), "Query status ID list must not be null!");
+        return ResponseEntity.ok(processService.queryStatus(type, queryRequest.isOnlyWaiting(), queryRequest.getDocumentIds()));
+    }
+
+    @Override
+    public ResponseEntity<?> queryProcessStatusByUsername(String type, String username, StatusQueryRequest queryRequest) {
+        Assert.notNull(type, "Document service type must not be null!");
+        Assert.hasLength(username, "Username must not be empty!");
+        Assert.notNull(queryRequest, "Query status payload must not be null!");
+        Assert.notNull(queryRequest.isOnlyWaiting(), "Query status type must not be null!");
+        Assert.notNull(queryRequest.getDocumentIds(), "Query status ID list must not be null!");
+        return ResponseEntity.ok(processService.queryStatus(type, queryRequest.isOnlyWaiting(), username, queryRequest.getDocumentIds()));
     }
 
     @Override
     public ResponseEntity<?> getApprovalProcess(String type, String id) {
         Assert.notNull(id, "Document id must not be null!");
         Assert.notNull(type, "Document service type must not be null!");
-        return ResponseEntity.ok(processService.getBy(id, type));
+        return ResponseEntity.ok(processService.get(id, type));
     }
 
     @Override
     public ResponseEntity<?> getApprovalProcess(Long processId) {
         Assert.notNull(processId, "Process id must not be null!");
-        return ResponseEntity.ok(processService.getBy(processId));
+        return ResponseEntity.ok(processService.get(processId));
     }
 
     @Override

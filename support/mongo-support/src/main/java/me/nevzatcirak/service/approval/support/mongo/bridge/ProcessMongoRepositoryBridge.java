@@ -88,6 +88,16 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
     }
 
     @Override
+    public Set<ApprovalProcess> findAllByWaitingStatus(String documentType, ApprovalProcessState status, Set<String> documentIds) {
+        return processConverter.toModelSet(processMongoRepository.findAllByDocumentTypeStatusAndIdList(documentType, status.value(), documentIds)
+                .orElseThrow(() ->
+                        new ApprovalProcessReadException(
+                                "Approval waiting process could not be read, which is defined in documentType=" + documentType +
+                                        ", documentIdList=" + String.join(",", documentIds)
+                        )));
+    }
+
+    @Override
     public Set<ApprovalProcess> findAllBy(String documentType, ApprovalProcessState state) {
         return processConverter.toModelSet(processMongoRepository.findAllByFilteringStateAndDocument(documentType, state.value())
                 .orElseThrow(() ->

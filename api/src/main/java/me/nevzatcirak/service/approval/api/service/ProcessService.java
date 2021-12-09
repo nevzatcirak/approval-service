@@ -52,7 +52,7 @@ public interface ProcessService {
      * @param documentType
      * @return ApprovalProcess
      */
-    ApprovalProcess getBy(String documentId, String documentType);
+    ApprovalProcess get(String documentId, String documentType);
 
     /**
      * Gets process by filtering process id
@@ -60,16 +60,28 @@ public interface ProcessService {
      * @param processId
      * @return ApprovalProcess
      */
-    ApprovalProcess getBy(Long processId);
+    ApprovalProcess get(Long processId);
 
     /**
-     * Query type statuses by filtering id list
+     * Query type statuses by filtering id list and waiting status
      *
      * @param documentType
+     * @param onlyWaiting
      * @param documentIds
-     * @return Map<DocumentId, ProcessState>
+     * @return Set<ApprovalProcess>
      */
-    Map<String, ApprovalProcessState> queryStatus(String documentType, Set<String> documentIds);
+    Set<ApprovalProcess> queryStatus(String documentType, Boolean onlyWaiting, Set<String> documentIds);
+
+    /**
+     * Query type statuses by filtering id list, waiting status and username
+     *
+     * @param documentType
+     * @param onlyWaiting
+     * @param username
+     * @param documentIds
+     * @return Set<ApprovalProcess>
+     */
+    Set<ApprovalProcess> queryStatus(String documentType, Boolean onlyWaiting, String username, Set<String> documentIds);
 
     /**
      * Gets process list by filtering final status

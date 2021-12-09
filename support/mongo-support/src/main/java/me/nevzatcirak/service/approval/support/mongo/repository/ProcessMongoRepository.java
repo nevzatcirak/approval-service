@@ -16,17 +16,15 @@ public interface ProcessMongoRepository extends MongoRepository<ProcessDocument,
     @Query(value = "{'documentId' : ?0, 'documentType' : ?1}")
     Optional<ProcessDocument> findByDocumentIdAndDocumentType(String documentId, String documentType);
 
-    @Query(value = "{'documentType' : ?0, 'documentId' : {'$in' : ?1}}", fields = "{'_id':1, 'documentType':1, " +
-            "'documentId':1, 'status':1}")
+    @Query(value = "{'documentType' : ?0, 'documentId' : {'$in' : ?1}}", sort = "{'_id' : 1}")
     Optional<Set<ProcessDocument>> findAllByDocumentTypeAndIdList(String documentType, Set<String> documentIds);
 
-    @Query(value = "{'documentType' : ?0, 'status': ?1}", fields = "{'_id':1, 'documentType':1, " +
-            "'documentId':1, 'status':1}")
+    @Query(value = "{'documentType' : ?0, 'status': ?1, 'documentId' : {'$in' : ?2}}", sort = "{'_id' : 1}")
+    Optional<Set<ProcessDocument>> findAllByDocumentTypeStatusAndIdList(String documentType, int state, Set<String> documentIds);
+
+    @Query(value = "{'documentType' : ?0, 'status': ?1}")
     Optional<Set<ProcessDocument>> findAllByFilteringStateAndDocument(String documentType, int state);
 
-    @Query(value = "{'documentType' : ?0}", fields = "{'_id':1, 'documentType':1, " +
-            "'documentId':1, 'status':1}")
+    @Query(value = "{'documentType' : ?0}")
     Optional<Set<ProcessDocument>> findAllByDocumentType(String documentType);
-
-    //Optional<ProcessDocument> findNextApprover(Long processId);
 }

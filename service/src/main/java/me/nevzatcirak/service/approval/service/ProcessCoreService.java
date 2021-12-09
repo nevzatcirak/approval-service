@@ -11,9 +11,11 @@ import me.nevzatcirak.service.approval.api.repository.ProcessRepository;
 import me.nevzatcirak.service.approval.api.service.ProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -53,7 +55,7 @@ public class ProcessCoreService implements ProcessService {
     }
 
     @Override
-    public ApprovalProcess getBy(String documentId, String documentType) {
+    public ApprovalProcess get(String documentId, String documentType) {
         ApprovalProcess process = processRepository.findBy(documentId, documentType);
         if (Objects.isNull(process)) {
             throw new ApprovalProcessNotFoundException("Not found approval process object by using documentId: " + documentId + ", documentType: " + documentType);
@@ -62,7 +64,7 @@ public class ProcessCoreService implements ProcessService {
     }
 
     @Override
-    public ApprovalProcess getBy(Long processId) {
+    public ApprovalProcess get(Long processId) {
         ApprovalProcess process = processRepository.findBy(processId);
         if (Objects.isNull(process)) {
             throw new ApprovalProcessNotFoundException("Not found approval process object by using processId: " + processId);
@@ -80,12 +82,25 @@ public class ProcessCoreService implements ProcessService {
     }
 
     @Override
-    public Map<String, ApprovalProcessState> queryStatus(String documentType, Set<String> documentIds) {
-        Set<ApprovalProcess> approvalProcessSet = processRepository.findAllBy(documentType, documentIds);
-        if (Objects.isNull(approvalProcessSet)) {
-            throw new ApprovalProcessNotFoundException("Not found approval process object by using idList = " + String.join(",", documentIds));
-        }
-        return convertMap(approvalProcessSet);
+    public Set<ApprovalProcess> queryStatus(String documentType, Boolean onlyWaiting, Set<String> documentIds) {
+        Set<ApprovalProcess> approvalProcessSet;
+        if (documentIds.isEmpty())
+            approvalProcessSet = onlyWaiting ?
+                    processRepository.findAllBy(documentType, ApprovalProcessState.WAITING) :
+                    processRepository.findAllBy(documentType);
+        else
+            approvalProcessSet = onlyWaiting ?
+                    processRepository.findAllByWaitingStatus(documentType, ApprovalProcessState.WAITING, documentIds) :
+                    processRepository.findAllBy(documentType, documentIds);
+
+        if (Objects.isNull(approvalProcessSet))
+            throw new ApprovalProcessNotFoundException("Not found any approval process object by using idList = " + String.join(",", documentIds));
+        return approvalProcessSet;
+    }
+
+    @Override
+    public Set<ApprovalProcess> queryStatus(String documentType, Boolean onlyWaiting, String username, Set<String> documentIds) {
+        return null;
     }
 
     @Override
@@ -145,14 +160,6 @@ public class ProcessCoreService implements ProcessService {
     private Approver findNextApprover(ApprovalProcess process) {
         List<Long> approverIds = process.getDetail().stream().map(Approver::getId).collect(Collectors.toList());
         return detailRepository.nextApprover(approverIds);
-    }
-
-    private Map<String, ApprovalProcessState> convertMap(Set<ApprovalProcess> approvalProcessSet) {
-        Map<String, ApprovalProcessState> processMap = new HashMap<>();
-        approvalProcessSet.forEach(process -> {
-            processMap.put(process.getDocumentId(), process.getStatus());
-        });
-        return processMap;
     }
 
     @Autowired

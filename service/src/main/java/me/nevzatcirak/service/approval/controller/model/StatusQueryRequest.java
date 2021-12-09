@@ -8,22 +8,22 @@ import java.util.Set;
  * Created by ncirak at 07/12/2021
  */
 public class StatusQueryRequest {
-    private String type;
-    private Set<String> idList;
+    private Boolean onlyWaiting;
+    private Set<String> documentIds;
 
-    public String getType() {
-        return type;
+    public Boolean isOnlyWaiting() {
+        return onlyWaiting;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setOnlyWaiting(Boolean onlyWaiting) {
+        this.onlyWaiting = onlyWaiting;
     }
 
-    public Set<String> getIdList() {
-        return idList;
+    public Set<String> getDocumentIds() {
+        return documentIds;
     }
 
-    public void setIdList(Set<String> idList) {
-        this.idList = idList;
+    public void setDocumentIds(Set<String> documentIds) {
+        this.documentIds = documentIds;
     }
 }
