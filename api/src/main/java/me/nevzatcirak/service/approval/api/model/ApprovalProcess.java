@@ -1,6 +1,7 @@
 package me.nevzatcirak.service.approval.api.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -69,5 +70,21 @@ public class ApprovalProcess implements Serializable {
                 ", status=" + status +
                 ", detail=" + approvers +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ApprovalProcess that = (ApprovalProcess) o;
+        return id.equals(that.id) &&
+                documentType.equals(that.documentType) &&
+                documentId.equals(that.documentId) &&
+                status == that.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, documentType, documentId, status);
     }
 }

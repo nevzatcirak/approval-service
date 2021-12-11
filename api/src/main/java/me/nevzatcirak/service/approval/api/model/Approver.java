@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @author Nevzat ÇIRAK
@@ -86,5 +87,23 @@ public class Approver implements Serializable {
                 ", status=" + status +
                 ", active=" + active +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Approver approver = (Approver) o;
+        return id.equals(approver.id) &&
+                processId.equals(approver.processId) &&
+                sequenceNumber.equals(approver.sequenceNumber) &&
+                username.equals(approver.username) &&
+                status == approver.status &&
+                Objects.equals(active, approver.active);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, processId, sequenceNumber, username, status, active);
     }
 }

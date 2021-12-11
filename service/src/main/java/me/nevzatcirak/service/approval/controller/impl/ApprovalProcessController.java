@@ -37,7 +37,7 @@ public class ApprovalProcessController implements ProcessController {
 
     @Override
     public ResponseEntity<ApprovalProcess> updateProcessState(String documentType, String documentId,
-                                                StateDetailUpdateRequest stateDetailUpdateRequest) {
+                                                              StateDetailUpdateRequest stateDetailUpdateRequest) {
         Assert.notNull(documentId, "Document id must not be null!");
         Assert.notNull(documentType, "Document service documentType must not be null!");
         Assert.notNull(stateDetailUpdateRequest, "Approval process update request must not be null!");
@@ -89,10 +89,10 @@ public class ApprovalProcessController implements ProcessController {
     }
 
     @Override
-    public ResponseEntity<ApprovalProcess> getApprovalProcess(String documentType, String id) {
-        Assert.notNull(id, "Document id must not be null!");
+    public ResponseEntity<ApprovalProcess> getApprovalProcess(String documentType, String documentId) {
+        Assert.notNull(documentId, "Document documentId must not be null!");
         Assert.notNull(documentType, "Document service type must not be null!");
-        return ResponseEntity.ok(processService.get(id, documentType));
+        return ResponseEntity.ok(processService.get(documentId, documentType));
     }
 
     @Override

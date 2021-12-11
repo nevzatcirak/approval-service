@@ -145,7 +145,7 @@ public interface ProcessController {
      * @return Approver
      */
     @GetMapping("/{documentType}/{documentId}/next")
-    @ApiOperation(value = "Retrieves Process Next State Info", notes = "Process next approver info retrieving method by using document type and document id")
+    @ApiOperation(value = "Retrieves Process Next Approver Info", notes = "Process next approver info retrieving method by using document type and document id")
     ResponseEntity<Approver> getNextApprover(@ApiParam("Process Document/Service Name") @PathVariable String documentType,
                                              @ApiParam("Process Document Id") @PathVariable String documentId);
 
@@ -156,7 +156,7 @@ public interface ProcessController {
      * @return Approver
      */
     @GetMapping("/{processId}/next")
-    @ApiOperation(value = "Retrieves Process Next State Info", notes = "Process next approver info retrieving method by using process id")
+    @ApiOperation(value = "Retrieves Process Next Approver Info", notes = "Process next approver info retrieving method by using process id")
     ResponseEntity<Approver> getNextApprover(@ApiParam("Process ID") @PathVariable Long processId);
 
 

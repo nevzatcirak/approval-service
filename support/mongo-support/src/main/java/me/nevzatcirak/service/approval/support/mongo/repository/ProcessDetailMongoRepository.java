@@ -13,6 +13,4 @@ import java.util.Set;
  * Created by ncirak at 08/12/2021
  */
 public interface ProcessDetailMongoRepository extends MongoRepository<ProcessDetailDocument, Long> {
-    @Query(value = "{'_id' : {'$in' : ?0}, 'status' : 0}", sort = "{'sequenceNumber' : 1}")
-    Set<ProcessDetailDocument> findNextApprover(List<Long> approverIds);
 }

@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -95,5 +96,21 @@ public class ProcessDocument implements Serializable {
                 ", status=" + status +
                 ", details=" + details +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProcessDocument that = (ProcessDocument) o;
+        return id.equals(that.id) &&
+                documentType.equals(that.documentType) &&
+                documentId.equals(that.documentId) &&
+                status.equals(that.status);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, documentType, documentId, status);
     }
 }

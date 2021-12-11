@@ -4,10 +4,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @author Nevzat ÇIRAK
@@ -15,6 +18,9 @@ import java.io.Serializable;
  * Created by ncirak at 06/12/2021
  */
 @Document(collection = "approval_process_detail")
+@CompoundIndexes({
+        @CompoundIndex(name = "detail_active_process_id", def = "{'active': 1, 'processId':1}")
+})
 public class ProcessDetailDocument implements Serializable {
     @Transient
     public static final String SEQUENCE_NAME = "approval_process_detail_sequence";
@@ -105,5 +111,23 @@ public class ProcessDetailDocument implements Serializable {
                 ", status=" + status +
                 ", active=" + active +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProcessDetailDocument that = (ProcessDetailDocument) o;
+        return id.equals(that.id) &&
+                processId.equals(that.processId) &&
+                sequenceNumber.equals(that.sequenceNumber) &&
+                username.equals(that.username) &&
+                status.equals(that.status) &&
+                Objects.equals(active, that.active);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, processId, sequenceNumber, username, status);
     }
 }
