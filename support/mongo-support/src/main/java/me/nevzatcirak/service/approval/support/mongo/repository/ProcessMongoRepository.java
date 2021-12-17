@@ -10,8 +10,8 @@ import java.util.Set;
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
- * Created by ncirak at 06/12/2021
+ * @mail nevzatcirak17@gmail.com
+ * Created by nevzatcirak at 06/12/2021
  */
 public interface ProcessMongoRepository extends MongoRepository<ProcessDocument, Long> {
     @Query(value = "{'documentId' : ?0, 'documentType' : ?1}")
@@ -37,4 +37,28 @@ public interface ProcessMongoRepository extends MongoRepository<ProcessDocument,
     Optional<Set<ProcessDocument>> findAllByDocumentTypeIdsAndProcessIds(String documentType,
                                                                          Set<String> documentIds,
                                                                          List<Long> legitProcessIds);
+
+    @Query(value = "{'documentType' : ?0, 'status': ?2, '$or':[{'creator': ?1},{'_id':{'$in': ?3}}]}")
+    Optional<Set<ProcessDocument>> findAllByDocumentTypeStateAndUsername(String documentType,
+                                                                         String username,
+                                                                         int state,
+                                                                         List<Long> legitProcessIds);
+
+    @Query(value = "{'documentType' : ?0, '$or': [{'creator': ?1}, {'_id':{'$in': ?2}}]}")
+    Optional<Set<ProcessDocument>> findAllByDocumentTypeAndUsername(String documentType,
+                                                                    String username,
+                                                                    List<Long> legitProcessIds);
+
+    @Query(value = "{'documentType' : ?0, 'documentId':{'$in': ?2}, '$or':[{'creator': ?1},{'_id':{'$in': ?3}}]}")
+    Optional<Set<ProcessDocument>> findAllByDocumentTypeIdsAndUsername(String documentType,
+                                                                       String username,
+                                                                       Set<String> documentIds,
+                                                                       List<Long> legitProcessIds);
+
+    @Query(value = "{'documentType' : ?0, 'status': ?2, 'documentId':{'$in': ?3}, '$or':[{'creator': ?1},{'_id':{'$in': ?4}}]}")
+    Optional<Set<ProcessDocument>> findAllByDocumentTypeIdsAndUsername(String documentType,
+                                                                       String username,
+                                                                       int state,
+                                                                       Set<String> documentIds,
+                                                                       List<Long> legitProcessIds);
 }

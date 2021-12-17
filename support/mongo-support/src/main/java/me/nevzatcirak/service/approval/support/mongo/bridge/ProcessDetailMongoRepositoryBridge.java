@@ -1,5 +1,6 @@
 package me.nevzatcirak.service.approval.support.mongo.bridge;
 
+import me.nevzatcirak.service.approval.api.exception.ApprovalProcessReadException;
 import me.nevzatcirak.service.approval.api.exception.DuplicationException;
 import me.nevzatcirak.service.approval.api.model.Approver;
 import me.nevzatcirak.service.approval.api.repository.ProcessDetailRepository;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
+ * @mail nevzatcirak17@gmail.com
  * Created by ncirak at 09/12/2021
  */
 @Repository
@@ -67,6 +68,16 @@ public class ProcessDetailMongoRepositoryBridge implements ProcessDetailReposito
         query.addCriteria(Criteria.where("active").is(true).and("username").is(username));
         List<ProcessDetailDocument> processDetailDocuments = mongoTemplate.find(query, ProcessDetailDocument.class);
         return processDetailDocuments.stream().map(ProcessDetailDocument::getProcessId).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Long> findProcessIdsByEligibleUsername(String username) {
+        List<ProcessDetailDocument> legitApprovers = processDetailMongoRepository.findProcessIdsByEligibleUsername(username)
+                .orElseThrow(() ->
+                        new ApprovalProcessReadException(
+                                "Approvers could not be read, which is defined in username=" + username
+                        ));
+        return legitApprovers.stream().map(ProcessDetailDocument::getProcessId).collect(Collectors.toList());
     }
 
     @Override

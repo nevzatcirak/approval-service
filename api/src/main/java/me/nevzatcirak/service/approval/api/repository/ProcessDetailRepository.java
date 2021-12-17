@@ -6,8 +6,8 @@ import java.util.List;
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
- * Created by ncirak at 09/12/2021
+ * @mail nevzatcirak17@gmail.com
+ * Created by nevzatcirak at 09/12/2021
  */
 public interface ProcessDetailRepository {
     /**
@@ -41,6 +41,14 @@ public interface ProcessDetailRepository {
      * @return List of Legit Process Id
      */
     List<Long> findProcessIdsByNextApproverUsername(String username);
+
+    /**
+     * Finds process ids by using username who is eligible
+     *
+     * @param username
+     * @return List of Legit Process Id
+     */
+    List<Long> findProcessIdsByEligibleUsername(String username);
 
     /**
      * Finds process ids by using username

@@ -12,7 +12,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
+ * @mail nevzatcirak17@gmail.com
  * Created by ncirak at 10/12/2021
  */
 @Configuration

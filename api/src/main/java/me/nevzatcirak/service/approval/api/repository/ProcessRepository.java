@@ -83,6 +83,7 @@ public interface ProcessRepository {
 
     /**
      * Finds approval process by using type and processIds
+     *
      * @param documentType
      * @param legitProcessIds
      * @return Approval Process
@@ -91,10 +92,62 @@ public interface ProcessRepository {
 
     /**
      * Finds approval process by using type, documentIds and processIds
+     *
      * @param documentType
      * @param documentIds
      * @param legitProcessIds
      * @return Approval Process
      */
     Set<ApprovalProcess> findAllBy(String documentType, Set<String> documentIds, List<Long> legitProcessIds);
+
+
+    /**
+     * Retrieves data by filtering documentType, eligible username, process state and legitProcessIds from related database
+     *
+     * @param documentType
+     * @param username
+     * @param state
+     * @param legitProcessIds
+     * @return Found Set of ApprovalProcess Object
+     */
+    Set<ApprovalProcess> findAllEligibleBy(String documentType, String username,
+                                           ApprovalProcessState state, List<Long> legitProcessIds);
+
+    /**
+     * Retrieves data by filtering documentType, eligible username and legitProcessIds from related database
+     *
+     * @param documentType
+     * @param username
+     * @param legitProcessIds
+     * @return Found Set of ApprovalProcess Object
+     */
+    Set<ApprovalProcess> findAllEligibleBy(String documentType, String username, List<Long> legitProcessIds);
+
+    /**
+     * Finds approval process by using type, eligible username, documentIds and legitProcessIds
+     *
+     * @param documentType
+     * @param username
+     * @param documentIds
+     * @param legitProcessIds
+     * @return Approval Process
+     */
+    Set<ApprovalProcess> findAllEligibleBy(String documentType, String username,
+                                           Set<String> documentIds, List<Long> legitProcessIds);
+
+    /**
+     * Finds approval process by using type, eligible username, state, documentIds and legitProcessIds
+     *
+     * @param documentType
+     * @param username
+     * @param state
+     * @param documentIds
+     * @param legitProcessIds
+     * @return Approval Process
+     */
+    Set<ApprovalProcess> findAllEligibleBy(String documentType,
+                                           String username,
+                                           ApprovalProcessState state,
+                                           Set<String> documentIds,
+                                           List<Long> legitProcessIds);
 }

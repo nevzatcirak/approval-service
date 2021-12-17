@@ -8,8 +8,8 @@ import java.util.Objects;
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
- * Created by ncirak at 06/12/2021
+ * @mail nevzatcirak17@gmail.com
+ * Created by nevzatcirak at 06/12/2021
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Approver implements Serializable {
@@ -19,6 +19,7 @@ public class Approver implements Serializable {
     private Long processId;
     private Integer sequenceNumber;
     private String username;
+    private String comment;
     private ApprovalProcessState status;
     @JsonIgnore
     private Boolean active = false;
@@ -56,6 +57,15 @@ public class Approver implements Serializable {
 
     public Approver setUsername(String username) {
         this.username = username;
+        return this;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public Approver setComment(String comment) {
+        this.comment = comment;
         return this;
     }
 

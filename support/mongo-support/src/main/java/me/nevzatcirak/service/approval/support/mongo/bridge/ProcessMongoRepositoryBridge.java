@@ -21,8 +21,8 @@ import java.util.Set;
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
- * Created by ncirak at 06/12/2021
+ * @mail nevzatcirak17@gmail.com
+ * Created by nevzatcirak at 06/12/2021
  */
 @Repository
 public class ProcessMongoRepositoryBridge implements ProcessRepository {
@@ -41,7 +41,7 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
             throw new DuplicationException("Process already is exist, which has documentId=" + approvalProcess.getDocumentId() +
                     ", documentType=" + approvalProcess.getDocumentType());
         document.getDetails().forEach(detail -> {
-            if(detail.getSequenceNumber().equals(1))
+            if (detail.getSequenceNumber().equals(1))
                 detail.setActive(true);
             detail.setProcessId(document.getId());
         });
@@ -133,6 +133,52 @@ public class ProcessMongoRepositoryBridge implements ProcessRepository {
                 .orElseThrow(() ->
                         new ApprovalProcessReadException(
                                 "Approval processes could not be read, which is defined in documentType=" + documentType
+                        )));
+    }
+
+    @Override
+    public Set<ApprovalProcess> findAllEligibleBy(String documentType, String username,
+                                                  ApprovalProcessState state, List<Long> legitProcessIds) {
+        return processConverter.toModelSet(processMongoRepository
+                .findAllByDocumentTypeStateAndUsername(documentType, username, state.value(), legitProcessIds)
+                .orElseThrow(() ->
+                        new ApprovalProcessReadException(
+                                "Approval processes could not be read, which is defined in documentType=" + documentType +
+                                        ", state=" + state + " and username=" + username
+                        )));
+    }
+
+    @Override
+    public Set<ApprovalProcess> findAllEligibleBy(String documentType, String username, List<Long> legitProcessIds) {
+        return processConverter.toModelSet(processMongoRepository
+                .findAllByDocumentTypeAndUsername(documentType, username, legitProcessIds)
+                .orElseThrow(() ->
+                        new ApprovalProcessReadException(
+                                "Approval processes could not be read, which is defined in documentType=" + documentType + " and username=" + username
+                        )));
+    }
+
+    @Override
+    public Set<ApprovalProcess> findAllEligibleBy(String documentType, String username,
+                                                  Set<String> documentIds, List<Long> legitProcessIds) {
+        return processConverter.toModelSet(processMongoRepository
+                .findAllByDocumentTypeIdsAndUsername(documentType, username, documentIds, legitProcessIds)
+                .orElseThrow(() ->
+                        new ApprovalProcessReadException(
+                                "Approval processes could not be read, which is defined in documentType=" + documentType +
+                                        " and username=" + username
+                        )));
+    }
+
+    @Override
+    public Set<ApprovalProcess> findAllEligibleBy(String documentType, String username, ApprovalProcessState state,
+                                                  Set<String> documentIds, List<Long> legitProcessIds) {
+        return processConverter.toModelSet(processMongoRepository
+                .findAllByDocumentTypeIdsAndUsername(documentType, username, state.value(), documentIds, legitProcessIds)
+                .orElseThrow(() ->
+                        new ApprovalProcessReadException(
+                                "Approval processes could not be read, which is defined in documentType=" + documentType +
+                                        ", state=" + state + " and username=" + username
                         )));
     }
 

@@ -21,8 +21,8 @@ import java.util.Set;
  * Manages approval process core logic
  *
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
- * Created by ncirak at 07/12/2021
+ * @mail nevzatcirak17@gmail.com
+ * Created by nevzatcirak at 07/12/2021
  */
 @Service
 public class ProcessCoreService implements ProcessService {
@@ -45,12 +45,41 @@ public class ProcessCoreService implements ProcessService {
     }
 
     @Override
-    public ApprovalProcess update(String documentId, String documentType, String username, ApprovalProcessState status) {
+    public ApprovalProcess update(String documentId, String documentType, String username, String comment, ApprovalProcessState status) {
         ApprovalProcess process = processRepository.findBy(documentId, documentType);
         if (Objects.isNull(process)) {
             throw new ApprovalProcessNotFoundException("Not found approval process object by using documentId: " + documentId + ", documentType: " + documentType);
         }
-        return this.updateProcess(process, username, status);
+        return this.updateProcess(process, username, comment, status);
+    }
+
+    @Override
+    public ApprovalProcess update(Long processId, String username, String comment, ApprovalProcessState status) {
+        ApprovalProcess process = processRepository.findBy(processId);
+        if (Objects.isNull(process)) {
+            throw new ApprovalProcessNotFoundException("Not found approval process object by using processId: " + processId);
+        }
+        return this.updateProcess(process, username, comment, status);
+    }
+
+    @Override
+    public ApprovalProcess cancel(Long processId) {
+        ApprovalProcess process = processRepository.findBy(processId);
+        if (Objects.isNull(process)) {
+            throw new ApprovalProcessNotFoundException("Not found approval process object by using processId: " + processId);
+        }
+        process.setCanceled(true);
+        return processRepository.save(process);
+    }
+
+    @Override
+    public ApprovalProcess cancel(String documentId, String documentType) {
+        ApprovalProcess process = processRepository.findBy(documentId, documentType);
+        if (Objects.isNull(process)) {
+            throw new ApprovalProcessNotFoundException("Not found approval process object by using documentId: " + documentId + ", documentType: " + documentType);
+        }
+        process.setCanceled(true);
+        return processRepository.save(process);
     }
 
     @Override
@@ -69,15 +98,6 @@ public class ProcessCoreService implements ProcessService {
             throw new ApprovalProcessNotFoundException("Not found approval process object by using processId: " + processId);
         }
         return process;
-    }
-
-    @Override
-    public ApprovalProcess update(Long processId, String username, ApprovalProcessState status) {
-        ApprovalProcess process = processRepository.findBy(processId);
-        if (Objects.isNull(process)) {
-            throw new ApprovalProcessNotFoundException("Not found approval process object by using processId: " + processId);
-        }
-        return this.updateProcess(process, username, status);
     }
 
     @Override
@@ -105,6 +125,23 @@ public class ProcessCoreService implements ProcessService {
         approvalProcessSet = documentIds.isEmpty() ?
                 processRepository.findAllBy(documentType, legitProcessIds) :
                 processRepository.findAllBy(documentType, documentIds, legitProcessIds);
+        if (Objects.isNull(approvalProcessSet))
+            throw new ApprovalProcessNotFoundException("Not found any approval process object by using idList = " + String.join(",", documentIds));
+        return approvalProcessSet;
+    }
+
+    @Override
+    public Set<ApprovalProcess> queryStatusByUsingEligibility(String documentType, Boolean onlyWaiting, String username, Set<String> documentIds) {
+        Set<ApprovalProcess> approvalProcessSet;
+        List<Long> legitProcessIds = detailRepository.findProcessIdsByEligibleUsername(username);
+        if (documentIds.isEmpty())
+            approvalProcessSet = onlyWaiting ?
+                    processRepository.findAllEligibleBy(documentType, username, ApprovalProcessState.WAITING, legitProcessIds) :
+                    processRepository.findAllEligibleBy(documentType, username, legitProcessIds);
+        else
+            approvalProcessSet = onlyWaiting ?
+                    processRepository.findAllEligibleBy(documentType, username, ApprovalProcessState.WAITING, documentIds, legitProcessIds) :
+                    processRepository.findAllEligibleBy(documentType, username, documentIds, legitProcessIds);
         if (Objects.isNull(approvalProcessSet))
             throw new ApprovalProcessNotFoundException("Not found any approval process object by using idList = " + String.join(",", documentIds));
         return approvalProcessSet;
@@ -145,7 +182,7 @@ public class ProcessCoreService implements ProcessService {
         return nextApprover;
     }
 
-    private ApprovalProcess updateProcess(ApprovalProcess process, String username, ApprovalProcessState status) {
+    private ApprovalProcess updateProcess(ApprovalProcess process, String username, String comment, ApprovalProcessState status) {
         Approver approver = nextApprover(process.getId());
         Set<Approver> approvers = process.getApprovers();
         if (Objects.nonNull(approver) && approver.getUsername().equals(username))
@@ -153,6 +190,7 @@ public class ProcessCoreService implements ProcessService {
                 if (currentApprover.getUsername().equals(username)) {
                     currentApprover.setStatus(status);
                     currentApprover.setActive(false);
+                    currentApprover.setComment(comment);
                     saveNextApproverActiveStatus(detailRepository.update(currentApprover), approvers);
                     boolean isAllApproved = approvers.stream().allMatch(approvalDetail
                             -> approvalDetail.getStatus().equals(ApprovalProcessState.APPROVED));

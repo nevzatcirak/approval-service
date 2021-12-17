@@ -7,8 +7,8 @@ import java.util.Set;
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
- * Created by ncirak at 07/12/2021
+ * @mail nevzatcirak17@gmail.com
+ * Created by nevzatcirak at 07/12/2021
  */
 @ApiModel("Process Query Request Model")
 public class QueryRequest {

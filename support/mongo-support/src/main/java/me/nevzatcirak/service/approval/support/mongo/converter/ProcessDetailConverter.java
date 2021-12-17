@@ -14,8 +14,8 @@ import java.util.Set;
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
- * Created by ncirak at 06/12/2021
+ * @mail nevzatcirak17@gmail.com
+ * Created by nevzatcirak at 06/12/2021
  */
 @Component
 public class ProcessDetailConverter implements Converter<Approver, ProcessDetailDocument> {
@@ -29,6 +29,7 @@ public class ProcessDetailConverter implements Converter<Approver, ProcessDetail
                 .setId(processDetailDocument.getId())
                 .setProcessId(processDetailDocument.getProcessId())
                 .setUsername(processDetailDocument.getUsername())
+                .setComment(processDetailDocument.getComment())
                 .setSequenceNumber(processDetailDocument.getSequenceNumber())
                 .setActive(processDetailDocument.isActive())
                 .setStatus(ApprovalProcessState.valueOf(processDetailDocument.getStatus()));
@@ -40,6 +41,7 @@ public class ProcessDetailConverter implements Converter<Approver, ProcessDetail
             return null;
         ProcessDetailDocument document = new ProcessDetailDocument();
         document.setUsername(approver.getUsername());
+        document.setComment(approver.getComment());
         document.setStatus(approver.getStatus().value());
         document.setSequenceNumber(approver.getSequenceNumber());
         document.setProcessId(approver.getProcessId());
