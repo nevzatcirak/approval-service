@@ -12,7 +12,7 @@
     <groupId>me.nevzatcirak.service.approval</groupId>
     <artifactId>parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>approval</name>
+    <name>Approval Parent Module</name>
     <description>Basic Approval Service</description>
     <packaging>pom</packaging>
 

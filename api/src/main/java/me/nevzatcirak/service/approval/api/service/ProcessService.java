@@ -32,7 +32,7 @@ public interface ProcessService {
      * @param status
      * @return ApprovalProcess
      */
-    ApprovalProcess update(String documentId, String documentType, String username, ApprovalProcessState status);
+    ApprovalProcess update(String documentId, String documentType, String username, String comment, ApprovalProcessState status);
 
     /**
      * Update a process detail state by using username and status
@@ -42,7 +42,24 @@ public interface ProcessService {
      * @param status
      * @return ApprovalProcess
      */
-    ApprovalProcess update(Long processId, String username, ApprovalProcessState status);
+    ApprovalProcess update(Long processId, String username, String comment, ApprovalProcessState status);
+
+    /**
+     * Cancel related approval process
+     *
+     * @param processId
+     * @return ApprovalProcess
+     */
+    ApprovalProcess cancel(Long processId);
+
+    /**
+     * Cancel related approval process
+     *
+     * @param documentId
+     * @param documentType
+     * @return ApprovalProcess
+     */
+    ApprovalProcess cancel(String documentId, String documentType);
 
     /**
      * Gets process by filtering document id and type
@@ -82,6 +99,17 @@ public interface ProcessService {
      * @return Set<ApprovalProcess>
      */
     Set<ApprovalProcess> queryStatus(String documentType, Boolean onlyWaiting, String username, Boolean onlyNextApprover, Set<String> documentIds);
+
+    /**
+     * Query type statuses by filtering id list, waiting status and username eligibility
+     *
+     * @param documentType
+     * @param onlyWaiting
+     * @param username
+     * @param documentIds
+     * @return Set<ApprovalProcess>
+     */
+    Set<ApprovalProcess> queryStatusByUsingEligibility(String documentType, Boolean onlyWaiting, String username, Set<String> documentIds);
 
     /**
      * Gets process list by filtering final status

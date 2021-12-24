@@ -14,8 +14,8 @@ import java.util.Set;
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
- * Created by ncirak at 06/12/2021
+ * @mail nevzatcirak17@gmail.com
+ * Created by nevzatcirak at 06/12/2021
  */
 @Component
 public class ProcessConverter implements Converter<ApprovalProcess, ProcessDocument> {
@@ -31,6 +31,8 @@ public class ProcessConverter implements Converter<ApprovalProcess, ProcessDocum
                 .setDocumentType(processDocument.getDocumentType())
                 .setApprovers(detailConverter.toModelSet(processDocument.getDetails()))
                 .setId(processDocument.getId())
+                .setCreator(processDocument.getCreator())
+                .setCanceled(processDocument.isCanceled())
                 .setStatus(ApprovalProcessState.valueOf(processDocument.getStatus()));
     }
 
@@ -43,6 +45,8 @@ public class ProcessConverter implements Converter<ApprovalProcess, ProcessDocum
         document.setDocumentId(approvalProcess.getDocumentId());
         document.setDocumentType(approvalProcess.getDocumentType());
         document.setDetails(detailConverter.toDocumentSet(approvalProcess.getApprovers()));
+        document.setCreator(approvalProcess.getCreator());
+        document.setCanceled(approvalProcess.isCanceled());
         if (Objects.isNull(approvalProcess.getId()))
             document.setId(sequenceGenerator.generateIdSequence(ProcessDocument.SEQUENCE_NAME));
         else

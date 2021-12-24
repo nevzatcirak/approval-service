@@ -1,18 +1,23 @@
 package me.nevzatcirak.service.approval.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
- * Created by ncirak at 06/12/2021
+ * @mail nevzatcirak17@gmail.com
+ * Created by nevzatcirak at 06/12/2021
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ApprovalProcess implements Serializable {
     private Long id;
     private String documentType;
     private String documentId;
+    private String creator;
+    private boolean canceled;
     private ApprovalProcessState status;
     private Set<Approver> approvers;
 
@@ -40,6 +45,24 @@ public class ApprovalProcess implements Serializable {
 
     public ApprovalProcess setDocumentId(String documentId) {
         this.documentId = documentId;
+        return this;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public ApprovalProcess setCreator(String creator) {
+        this.creator = creator;
+        return this;
+    }
+
+    public boolean isCanceled() {
+        return canceled;
+    }
+
+    public ApprovalProcess setCanceled(boolean canceled) {
+        this.canceled = canceled;
         return this;
     }
 

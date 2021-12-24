@@ -16,7 +16,7 @@ import java.util.Set;
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
+ * @mail nevzatcirak17@gmail.com
  * Created by ncirak at 06/12/2021
  */
 @Document(collection = "approval_process")
@@ -37,8 +37,14 @@ public class ProcessDocument implements Serializable {
     @Field("documentId")
     private String documentId;
 
+    @Field("creator")
+    private String creator;
+
     @Field("status")
     private Integer status;
+
+    @Field("canceled")
+    private boolean canceled;
 
     @DBRef
     @Field("details")
@@ -71,12 +77,30 @@ public class ProcessDocument implements Serializable {
         this.documentId = documentId;
     }
 
+    public String getCreator() {
+        return creator;
+    }
+
+    public ProcessDocument setCreator(String creator) {
+        this.creator = creator;
+        return this;
+    }
+
     public Integer getStatus() {
         return status;
     }
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public boolean isCanceled() {
+        return canceled;
+    }
+
+    public ProcessDocument setCanceled(boolean canceled) {
+        this.canceled = canceled;
+        return this;
     }
 
     public Set<ProcessDetailDocument> getDetails() {

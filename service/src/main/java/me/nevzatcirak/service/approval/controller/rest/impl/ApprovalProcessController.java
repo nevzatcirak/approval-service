@@ -18,8 +18,8 @@ import java.util.Set;
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
- * Created by ncirak at 07/12/2021
+ * @mail nevzatcirak17@gmail.com
+ * Created by nevzatcirak at 07/12/2021
  */
 @RestController
 public class ApprovalProcessController implements ProcessController {
@@ -44,7 +44,9 @@ public class ApprovalProcessController implements ProcessController {
         Assert.notNull(stateDetailUpdateRequest.getUsername(), "Approver username must not be null!");
         Assert.notNull(stateDetailUpdateRequest.getStatus(), "Approver state action must not be null!");
         return ResponseEntity.ok(processService.update(documentId, documentType,
-                stateDetailUpdateRequest.getUsername(), stateDetailUpdateRequest.getStatus()));
+                stateDetailUpdateRequest.getUsername(),
+                stateDetailUpdateRequest.getComment(),
+                stateDetailUpdateRequest.getStatus()));
     }
 
     @Override
@@ -56,7 +58,20 @@ public class ApprovalProcessController implements ProcessController {
         return ResponseEntity.ok(processService.update(
                 processId,
                 stateDetailUpdateRequest.getUsername(),
+                stateDetailUpdateRequest.getComment(),
                 stateDetailUpdateRequest.getStatus()));
+    }
+
+    @Override
+    public ResponseEntity<ApprovalProcess> cancelProcess(String documentType, String documentId) {
+        Assert.notNull(documentId, "Document id must not be null!");
+        return ResponseEntity.ok(processService.cancel(documentId, documentType));
+    }
+
+    @Override
+    public ResponseEntity<ApprovalProcess> cancelProcess(Long processId) {
+        Assert.notNull(processId, "Approval process id must not be null!");
+        return ResponseEntity.ok(processService.cancel(processId));
     }
 
     @Override
@@ -86,6 +101,16 @@ public class ApprovalProcessController implements ProcessController {
         Assert.notNull(queryRequest.isOnlyWaiting(), "Query status document type must not be null!");
         Assert.notNull(queryRequest.getDocumentIds(), "Query status ID list must not be null!");
         return ResponseEntity.ok(processService.queryStatus(documentType, queryRequest.isOnlyWaiting(), username, true, queryRequest.getDocumentIds()));
+    }
+
+    @Override
+    public ResponseEntity<Set<ApprovalProcess>> queryProcessStatusByEligibleUser(String documentType, String username, QueryRequest queryRequest) {
+        Assert.notNull(documentType, "Document service/document type must not be null!");
+        Assert.hasLength(username, "Username must not be empty!");
+        Assert.notNull(queryRequest, "Query status payload must not be null!");
+        Assert.notNull(queryRequest.isOnlyWaiting(), "Query status document type must not be null!");
+        Assert.notNull(queryRequest.getDocumentIds(), "Query status ID list must not be null!");
+        return ResponseEntity.ok(processService.queryStatusByUsingEligibility(documentType, queryRequest.isOnlyWaiting(), username, queryRequest.getDocumentIds()));
     }
 
     @Override

@@ -5,8 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
- * Created by ncirak at 10/12/2021
+ * @mail nevzatcirak17@gmail.com
+ * Created by nevzatcirak at 10/12/2021
  */
 @ApiModel("Error Response Model")
 public class ErrorResponse {
@@ -24,7 +24,7 @@ public class ErrorResponse {
         return statusCode;
     }
 
-    public ErrorResponse setStatusCode(int statusCode) {
+    public me.nevzatcirak.service.approval.controller.model.ErrorResponse setStatusCode(int statusCode) {
         this.statusCode = statusCode;
         return this;
     }
@@ -33,7 +33,7 @@ public class ErrorResponse {
         return message;
     }
 
-    public ErrorResponse setMessage(String message) {
+    public me.nevzatcirak.service.approval.controller.model.ErrorResponse setMessage(String message) {
         this.message = message;
         return this;
     }

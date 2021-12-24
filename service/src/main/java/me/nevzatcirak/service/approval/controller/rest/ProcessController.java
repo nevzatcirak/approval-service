@@ -16,8 +16,8 @@ import java.util.Set;
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
- * Created by ncirak at 07/12/2021
+ * @mail nevzatcirak17@gmail.com
+ * Created by nevzatcirak at 07/12/2021
  */
 @RequestMapping("/api/process")
 @Api(value = "Approval Process Api Documentation")
@@ -63,6 +63,29 @@ public interface ProcessController {
                                                        @RequestBody StateDetailUpdateRequest stateDetailUpdateRequest);
 
     /**
+     * Update a process detail state by using username and status
+     *
+     * @param documentType
+     * @param documentId
+     * @return ApprovalProcess
+     */
+    @PutMapping("/{documentType}/{documentId}/cancel")
+    @ApiOperation(value = "Cancel Related Process", notes = "Process info cancelling method by using document type and document id")
+    ResponseEntity<ApprovalProcess> cancelProcess(
+            @ApiParam("Process Document/Service Name") @PathVariable String documentType,
+            @ApiParam("Process Document Id") @PathVariable String documentId);
+
+    /**
+     * Update a process detail state by using username and status
+     *
+     * @param processId
+     * @return ApprovalProcess
+     */
+    @PutMapping("/{processId}/cancel")
+    @ApiOperation(value = "Cancel Related Process", notes = "Process info cancelling method by using process id")
+    ResponseEntity<ApprovalProcess> cancelProcess(@ApiParam("Process ID") @PathVariable Long processId);
+
+    /**
      * Query type statuses by filtering id list
      *
      * @param documentType
@@ -97,10 +120,25 @@ public interface ProcessController {
      * @return Set<ApprovalProcess>
      */
     @PostMapping("/query/{documentType}/{username}/next")
-    @ApiOperation(value = "Query User's Process State", notes = "Process info querying method by using document type and username who is next approver")
+    @ApiOperation(value = "Query Next Approver's Process State", notes = "Process info querying method by using document type and username who is next approver")
     ResponseEntity<Set<ApprovalProcess>> queryProcessStatusByNextApproverUsername(@ApiParam("Process Document/Service Name") @PathVariable String documentType,
                                                                                   @ApiParam("Process Approver Username") @PathVariable String username,
                                                                                   @ApiParam("Process Query Request Data") @RequestBody QueryRequest queryRequest);
+
+    /**
+     * Query type statuses by filtering id list and eligible username
+     *
+     * @param documentType
+     * @param username
+     * @param queryRequest
+     * @return
+     */
+    @PostMapping("/query/{documentType}/{username}/eligible")
+    @ApiOperation(value = "Query Eligible User's Process State", notes = "Process info querying method by using document type and username who is eligible. " +
+            "Eligible means that User should be creator or already approved/rejected or next approver")
+    ResponseEntity<Set<ApprovalProcess>> queryProcessStatusByEligibleUser(@ApiParam("Process Document/Service Name") @PathVariable String documentType,
+                                                                          @ApiParam("Process Approver Username") @PathVariable String username,
+                                                                          @ApiParam("Process Query Request Data") @RequestBody QueryRequest queryRequest);
 
     /**
      * Gets process list by filtering final status

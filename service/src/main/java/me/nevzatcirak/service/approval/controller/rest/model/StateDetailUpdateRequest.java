@@ -8,13 +8,15 @@ import java.io.Serializable;
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
- * Created by ncirak at 07/12/2021
+ * @mail nevzatcirak17@gmail.com
+ * Created by nevzatcirak at 07/12/2021
  */
 @ApiModel("Approver Update Status Request Model")
 public class StateDetailUpdateRequest implements Serializable {
     @ApiModelProperty("Approver username")
     private String username;
+    @ApiModelProperty("Approver action reason or comment")
+    private String comment;
     @ApiModelProperty("Updated status")
     private ApprovalProcessState status;
 
@@ -24,6 +26,15 @@ public class StateDetailUpdateRequest implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public me.nevzatcirak.service.approval.controller.model.StateDetailUpdateRequest setComment(String comment) {
+        this.comment = comment;
+        return this;
     }
 
     public ApprovalProcessState getStatus() {

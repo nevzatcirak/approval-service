@@ -14,8 +14,8 @@ import java.util.Objects;
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
- * Created by ncirak at 06/12/2021
+ * @mail nevzatcirak17@gmail.com
+ * Created by nevzatcirak at 06/12/2021
  */
 @Document(collection = "approval_process_detail")
 @CompoundIndexes({
@@ -36,6 +36,9 @@ public class ProcessDetailDocument implements Serializable {
 
     @Field("username")
     private String username;
+
+    @Field("comment")
+    private String comment;
 
     @Field("status")
     private Integer status;
@@ -85,6 +88,15 @@ public class ProcessDetailDocument implements Serializable {
         this.username = username;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public ProcessDetailDocument setComment(String comment) {
+        this.comment = comment;
+        return this;
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -108,6 +120,7 @@ public class ProcessDetailDocument implements Serializable {
                 ", processId=" + processId +
                 ", sequenceNumber=" + sequenceNumber +
                 ", username='" + username + '\'' +
+                ", comment=" + comment +
                 ", status=" + status +
                 ", active=" + active +
                 '}';
