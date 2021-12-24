@@ -1,14 +1,14 @@
-package me.nevzatcirak.service.approval.controller.impl;
+package me.nevzatcirak.service.approval.controller.rest.impl;
 
 import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
 import me.nevzatcirak.service.approval.api.model.Approver;
 import me.nevzatcirak.service.approval.api.service.ProcessService;
-import me.nevzatcirak.service.approval.controller.ProcessController;
-import me.nevzatcirak.service.approval.controller.model.CreateApprovalRequest;
-import me.nevzatcirak.service.approval.controller.model.ProcessRequestState;
-import me.nevzatcirak.service.approval.controller.model.QueryRequest;
-import me.nevzatcirak.service.approval.controller.model.StateDetailUpdateRequest;
+import me.nevzatcirak.service.approval.controller.rest.ProcessController;
+import me.nevzatcirak.service.approval.controller.rest.model.CreateApprovalRequest;
+import me.nevzatcirak.service.approval.controller.rest.model.ProcessRequestState;
+import me.nevzatcirak.service.approval.controller.rest.model.QueryRequest;
+import me.nevzatcirak.service.approval.controller.rest.model.StateDetailUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;

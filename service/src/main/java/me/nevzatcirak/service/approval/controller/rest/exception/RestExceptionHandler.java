@@ -1,11 +1,11 @@
-package me.nevzatcirak.service.approval.controller.exception;
+package me.nevzatcirak.service.approval.controller.rest.exception;
 
 import io.swagger.annotations.Api;
 import me.nevzatcirak.service.approval.api.exception.ApprovalProcessNotFoundException;
 import me.nevzatcirak.service.approval.api.exception.ApprovalProcessReadException;
 import me.nevzatcirak.service.approval.api.exception.ApproverNotFoundException;
 import me.nevzatcirak.service.approval.api.exception.DuplicationException;
-import me.nevzatcirak.service.approval.controller.model.ErrorResponse;
+import me.nevzatcirak.service.approval.controller.rest.model.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

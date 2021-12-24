@@ -1,4 +1,4 @@
-package me.nevzatcirak.service.approval.controller.model;
+package me.nevzatcirak.service.approval.controller.rest.model;
 
 /**
  * @author Nevzat ÇIRAK

@@ -12,11 +12,13 @@
     <artifactId>boot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Approval Application Module</name>
+
     <properties>
         <jib.maven.plugin.version>1.8.0</jib.maven.plugin.version>
         <docker-image-name>infra-approval</docker-image-name>
         <java.version>11</java.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>me.nevzatcirak.service.approval</groupId>

@@ -1,4 +1,4 @@
-package me.nevzatcirak.service.approval.controller.model;
+package me.nevzatcirak.service.approval.controller.rest.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

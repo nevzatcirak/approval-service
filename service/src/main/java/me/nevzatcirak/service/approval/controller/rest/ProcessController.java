@@ -1,14 +1,14 @@
-package me.nevzatcirak.service.approval.controller;
+package me.nevzatcirak.service.approval.controller.rest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.model.Approver;
-import me.nevzatcirak.service.approval.controller.model.CreateApprovalRequest;
-import me.nevzatcirak.service.approval.controller.model.ProcessRequestState;
-import me.nevzatcirak.service.approval.controller.model.StateDetailUpdateRequest;
-import me.nevzatcirak.service.approval.controller.model.QueryRequest;
+import me.nevzatcirak.service.approval.controller.rest.model.CreateApprovalRequest;
+import me.nevzatcirak.service.approval.controller.rest.model.ProcessRequestState;
+import me.nevzatcirak.service.approval.controller.rest.model.StateDetailUpdateRequest;
+import me.nevzatcirak.service.approval.controller.rest.model.QueryRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
