@@ -13,7 +13,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 /**
  * @author Nevzat ÇIRAK
  * @mail nevzatcirak17@gmail.com
- * Created by ncirak at 10/12/2021
+ * Created by nevzatcirak at 10/12/2021
  */
 @Configuration
 public class ApprovalConfig implements WebMvcConfigurer {

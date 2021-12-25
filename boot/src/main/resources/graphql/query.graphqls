@@ -1,0 +1,14 @@
+type QueryResolver {
+  getApprovalProcess(documentType: String!, status: ProcessRequestState!) : ApprovalProcess!
+  getApprovalProcess(documentType: String!, documentId: String!) : ApprovalProcess!
+  getApprovalProcessByProcessId(processId: String!, status: ProcessRequestState!) : ApprovalProcess!
+  getApprovalProcessByProcessId(processId: String!) : ApprovalProcess!
+
+  getNextApprover(documentType: String!, documentId: String!) : Approver!
+  getNextApprover(processId: String!) : Approver!
+
+  query(documentType: String!, request: QueryRequest!) : [ApprovalProcess]!
+  queryByUsername(documentType: String!, request: QueryRequest!) : [ApprovalProcess]!
+  queryByNextApprover(documentType: String!, request: QueryRequest!) : [ApprovalProcess]!
+  queryByEligibleUser(documentType: String!, request: QueryRequest!) : [ApprovalProcess]!
+}

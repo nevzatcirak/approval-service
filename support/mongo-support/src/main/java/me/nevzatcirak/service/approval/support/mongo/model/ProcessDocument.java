@@ -17,7 +17,7 @@ import java.util.Set;
 /**
  * @author Nevzat ÇIRAK
  * @mail nevzatcirak17@gmail.com
- * Created by ncirak at 06/12/2021
+ * Created by nevzatcirak at 06/12/2021
  */
 @Document(collection = "approval_process")
 @CompoundIndexes({

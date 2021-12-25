@@ -5,8 +5,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 /**
  * @author Nevzat ÇIRAK
- * @mail ncirak@havelsan.com.tr
- * Created by ncirak at 08/12/2021
+ * @mail nevzatcirak17@gmail.com
+ * Created by nevzatcirak at 08/12/2021
  */
 @Configuration
 @EnableMongoRepositories(basePackages = "me.nevzatcirak.service.approval.support.mongo.repository")

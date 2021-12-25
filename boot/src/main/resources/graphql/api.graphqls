@@ -1,0 +1,29 @@
+enum ApprovalProcessState {
+    REJECTED
+    WAITING
+    APPROVED
+}
+
+type ApprovalProcess {
+  id: ID!
+  documentType: String!
+  documentId: String!
+  creator: String!
+  status: ApprovalProcessState!
+  canceled: Boolean
+  approvers: [Approver]!
+}
+
+type Approver {
+  id: ID!
+  username: String!
+  sequenceNumber: Int!
+  status: ApprovalProcessState!
+  active: Boolean!
+  comment: String
+}
+
+type ApproverSummary {
+    sequenceNumber: Int!
+    username: String!
+}

@@ -1,0 +1,6 @@
+# The Root Mutation for the application
+type MutationResolver {
+  create(request: CreateApprovalRequest!) : ApprovalProcess!
+  update(documentType: String!, documentId: String!, stateDetailUpdateRequest: StateDetailUpdateRequest!) : ApprovalProcess!
+  update(processId: String!, stateDetailUpdateRequest: StateDetailUpdateRequest!) : ApprovalProcess!
+}

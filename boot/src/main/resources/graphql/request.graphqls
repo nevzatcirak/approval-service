@@ -1,0 +1,24 @@
+enum ProcessRequestState {
+     rejected
+     waiting
+     approved
+     all
+}
+
+type QueryRequest {
+    onlyWaiting: Boolean!
+    documentIds: [String]!
+}
+
+type CreateApprovalRequest {
+    id: ID!
+    type: String!
+    approvers: [ApproverSummary]!
+}
+
+type StateDetailUpdateRequest {
+    username: String!
+    comment: String!
+    status: ApprovalProcessState!
+}
+

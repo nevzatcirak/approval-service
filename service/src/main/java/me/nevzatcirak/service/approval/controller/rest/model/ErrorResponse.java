@@ -24,7 +24,7 @@ public class ErrorResponse {
         return statusCode;
     }
 
-    public me.nevzatcirak.service.approval.controller.model.ErrorResponse setStatusCode(int statusCode) {
+    public ErrorResponse setStatusCode(int statusCode) {
         this.statusCode = statusCode;
         return this;
     }
@@ -33,7 +33,7 @@ public class ErrorResponse {
         return message;
     }
 
-    public me.nevzatcirak.service.approval.controller.model.ErrorResponse setMessage(String message) {
+    public ErrorResponse setMessage(String message) {
         this.message = message;
         return this;
     }

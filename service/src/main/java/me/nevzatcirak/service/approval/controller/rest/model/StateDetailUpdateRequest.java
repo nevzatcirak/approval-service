@@ -32,7 +32,7 @@ public class StateDetailUpdateRequest implements Serializable {
         return comment;
     }
 
-    public me.nevzatcirak.service.approval.controller.model.StateDetailUpdateRequest setComment(String comment) {
+    public StateDetailUpdateRequest setComment(String comment) {
         this.comment = comment;
         return this;
     }

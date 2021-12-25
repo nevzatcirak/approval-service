@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 /**
  * @author Nevzat ÇIRAK
  * @mail nevzatcirak17@gmail.com
- * Created by ncirak at 09/12/2021
+ * Created by nevzatcirak at 09/12/2021
  */
 @Repository
 public class ProcessDetailMongoRepositoryBridge implements ProcessDetailRepository {
