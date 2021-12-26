@@ -5,20 +5,24 @@ enum ProcessRequestState {
      all
 }
 
-type QueryRequest {
+input QueryRequest {
     onlyWaiting: Boolean!
     documentIds: [String]!
 }
 
-type CreateApprovalRequest {
+input CreateApprovalRequest {
     id: ID!
     type: String!
     approvers: [ApproverSummary]!
 }
 
-type StateDetailUpdateRequest {
+input StateDetailUpdateRequest {
     username: String!
     comment: String!
     status: ApprovalProcessState!
 }
 
+input ApproverSummary {
+    sequenceNumber: Int!
+    username: String!
+}

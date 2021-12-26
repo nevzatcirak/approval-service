@@ -22,8 +22,3 @@ type Approver {
   active: Boolean!
   comment: String
 }
-
-type ApproverSummary {
-    sequenceNumber: Int!
-    username: String!
-}

@@ -38,19 +38,9 @@
 
         <!-- GraphQL Dependencies -->
         <dependency>
-            <groupId>com.graphql-java</groupId>
-            <artifactId>graphql-spring-boot-starter</artifactId>
-            <version>${graphql-spring-boot-starter.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.graphql-java</groupId>
+            <groupId>com.graphql-java-kickstart</groupId>
             <artifactId>graphql-java-tools</artifactId>
             <version>${graphql-java-tools.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.graphql-java</groupId>
-            <artifactId>graphiql-spring-boot-starter</artifactId>
-            <version>${graphql-spring-boot-starter.version}</version>
         </dependency>
     </dependencies>
 

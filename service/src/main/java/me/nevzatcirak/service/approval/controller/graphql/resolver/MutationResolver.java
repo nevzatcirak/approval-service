@@ -1,6 +1,6 @@
 package me.nevzatcirak.service.approval.controller.graphql.resolver;
 
-import com.coxautodev.graphql.tools.GraphQLMutationResolver;
+import graphql.kickstart.tools.GraphQLMutationResolver;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.service.ProcessService;
 import me.nevzatcirak.service.approval.controller.graphql.ProcessMutationResolver;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @mail nevzatcirak17@gmail.com
  * Created by nevzatcirak at 12/24/2021.
  */
-public class MutationResolver implements ProcessMutationResolver, GraphQLMutationResolver {
+public class MutationResolver implements ProcessMutationResolver {
     private ProcessService processService;
 
     @Override

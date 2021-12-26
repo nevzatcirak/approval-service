@@ -1,6 +1,6 @@
 package me.nevzatcirak.service.approval.controller.graphql.resolver;
 
-import com.coxautodev.graphql.tools.GraphQLQueryResolver;
+import graphql.kickstart.tools.GraphQLQueryResolver;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.model.Approver;
 import me.nevzatcirak.service.approval.api.service.ProcessService;
@@ -16,7 +16,7 @@ import java.util.Set;
  * @mail nevzatcirak17@gmail.com
  * Created by nevzatcirak at 12/24/2021.
  */
-public class QueryResolver implements ProcessQueryResolver, GraphQLQueryResolver {
+public class QueryResolver implements ProcessQueryResolver {
     private ProcessService processService;
 
     @Override

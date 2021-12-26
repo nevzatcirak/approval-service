@@ -1,5 +1,6 @@
 package me.nevzatcirak.service.approval.controller.graphql;
 
+import graphql.kickstart.tools.GraphQLQueryResolver;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.model.Approver;
 import me.nevzatcirak.service.approval.controller.rest.model.ProcessRequestState;
@@ -12,7 +13,7 @@ import java.util.Set;
  * @mail nevzatcirak17@gmail.com
  * Created by nevzatcirak at 12/24/2021.
  */
-public interface ProcessQueryResolver {
+public interface ProcessQueryResolver extends GraphQLQueryResolver {
     ApprovalProcess getApprovalProcess(String documentType, ProcessRequestState status);
 
     ApprovalProcess getApprovalProcessByProcessId(String processId, ProcessRequestState status);
