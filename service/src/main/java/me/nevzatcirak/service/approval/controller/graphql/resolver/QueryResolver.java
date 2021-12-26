@@ -1,7 +1,7 @@
 package me.nevzatcirak.service.approval.controller.graphql.resolver;
 
-import graphql.kickstart.tools.GraphQLQueryResolver;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
+import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
 import me.nevzatcirak.service.approval.api.model.Approver;
 import me.nevzatcirak.service.approval.api.service.ProcessService;
 import me.nevzatcirak.service.approval.controller.graphql.ProcessQueryResolver;
@@ -20,53 +20,65 @@ public class QueryResolver implements ProcessQueryResolver {
     private ProcessService processService;
 
     @Override
-    public ApprovalProcess getApprovalProcess(String documentType, ProcessRequestState status) {
-        return null;
-    }
-
-    @Override
-    public ApprovalProcess getApprovalProcessByProcessId(String processId, ProcessRequestState status) {
-        return null;
+    public Set<ApprovalProcess> getApprovalProcesses(String documentType, ProcessRequestState status) {
+        return processService.getAllByFilteringStatus(documentType, toApprovalProcessState(status));
     }
 
     @Override
     public ApprovalProcess getApprovalProcess(String documentType, String documentId) {
-        return null;
+        return processService.get(documentType, documentId);
     }
 
     @Override
     public ApprovalProcess getApprovalProcessByProcessId(String processId) {
-        return null;
+        return processService.get(Long.getLong(processId));
     }
 
     @Override
     public Approver getNextApprover(String documentType, String documentId) {
-        return null;
+        return processService.nextApprover(documentType, documentId);
     }
 
     @Override
     public Approver getNextApprover(String processId) {
-        return null;
+        return processService.nextApprover(Long.getLong(processId));
     }
 
     @Override
     public Set<ApprovalProcess> query(String documentType, QueryRequest request) {
-        return null;
+        return processService.queryStatus(documentType, request.isOnlyWaiting(), request.getDocumentIds());
     }
 
     @Override
     public Set<ApprovalProcess> queryByUsername(String documentType, String username, QueryRequest request) {
-        return null;
+        return processService.queryStatus(documentType, request.isOnlyWaiting(),
+                username, false, request.getDocumentIds());
     }
 
     @Override
     public Set<ApprovalProcess> queryByNextApprover(String documentType, String username, QueryRequest request) {
-        return null;
+        return processService.queryStatus(documentType, request.isOnlyWaiting(),
+                username, true, request.getDocumentIds());
     }
 
     @Override
     public Set<ApprovalProcess> queryByEligibleUser(String documentType, String username, QueryRequest request) {
-        return null;
+        return processService.queryStatusByUsingEligibility(documentType, request.isOnlyWaiting(),
+                username, request.getDocumentIds());
+    }
+
+    private ApprovalProcessState toApprovalProcessState(ProcessRequestState state) {
+        switch (state) {
+            case waiting:
+                return ApprovalProcessState.WAITING;
+            case approved:
+                return ApprovalProcessState.APPROVED;
+            case rejected:
+                return ApprovalProcessState.REJECTED;
+            case all:
+            default:
+                return null;
+        }
     }
 
     @Autowired

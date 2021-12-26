@@ -1,6 +1,5 @@
 package me.nevzatcirak.service.approval.controller.graphql.resolver;
 
-import graphql.kickstart.tools.GraphQLMutationResolver;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.service.ProcessService;
 import me.nevzatcirak.service.approval.controller.graphql.ProcessMutationResolver;
@@ -18,17 +17,20 @@ public class MutationResolver implements ProcessMutationResolver {
 
     @Override
     public ApprovalProcess create(CreateApprovalRequest request) {
-        return null;
+        return processService.create(request.getId(), request.getType(), request.getApprovers());
     }
 
     @Override
-    public ApprovalProcess update(String documentType, String documentId, StateDetailUpdateRequest stateDetailUpdateRequest) {
-        return null;
+    public ApprovalProcess update(String documentType, String documentId,
+                                  StateDetailUpdateRequest stateDetailUpdateRequest) {
+        return processService.update(documentId, documentType, stateDetailUpdateRequest.getUsername(),
+                stateDetailUpdateRequest.getComment(), stateDetailUpdateRequest.getStatus());
     }
 
     @Override
-    public ApprovalProcess update(Long processId, StateDetailUpdateRequest stateDetailUpdateRequest) {
-        return null;
+    public ApprovalProcess update(String processId, StateDetailUpdateRequest stateDetailUpdateRequest) {
+        return processService.update(Long.getLong(processId), stateDetailUpdateRequest.getUsername(),
+                stateDetailUpdateRequest.getComment(), stateDetailUpdateRequest.getStatus());
     }
 
     @Autowired

@@ -14,9 +14,7 @@ import java.util.Set;
  * Created by nevzatcirak at 12/24/2021.
  */
 public interface ProcessQueryResolver extends GraphQLQueryResolver {
-    ApprovalProcess getApprovalProcess(String documentType, ProcessRequestState status);
-
-    ApprovalProcess getApprovalProcessByProcessId(String processId, ProcessRequestState status);
+    Set<ApprovalProcess> getApprovalProcesses(String documentType, ProcessRequestState status);
 
     ApprovalProcess getApprovalProcess(String documentType, String documentId);
 

@@ -1,7 +1,6 @@
 type Query {
-  getApprovalProcess(documentType: String!, status: ProcessRequestState!) : ApprovalProcess!
+  getApprovalProcesses(documentType: String!, status: ProcessRequestState!) : [ApprovalProcess]!
   getApprovalProcess(documentType: String!, documentId: String!) : ApprovalProcess!
-  getApprovalProcessByProcessId(processId: String!, status: ProcessRequestState!) : ApprovalProcess!
   getApprovalProcessByProcessId(processId: String!) : ApprovalProcess!
 
   getNextApprover(documentType: String!, documentId: String!) : Approver!

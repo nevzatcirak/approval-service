@@ -15,5 +15,5 @@ public interface ProcessMutationResolver extends GraphQLMutationResolver {
 
     ApprovalProcess update(String documentType, String documentId, StateDetailUpdateRequest stateDetailUpdateRequest);
 
-    ApprovalProcess update(Long processId, StateDetailUpdateRequest stateDetailUpdateRequest);
+    ApprovalProcess update(String processId, StateDetailUpdateRequest stateDetailUpdateRequest);
 }
