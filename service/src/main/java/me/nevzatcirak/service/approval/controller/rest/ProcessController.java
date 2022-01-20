@@ -5,10 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.model.Approver;
-import me.nevzatcirak.service.approval.controller.rest.model.CreateApprovalRequest;
-import me.nevzatcirak.service.approval.controller.rest.model.ProcessRequestState;
-import me.nevzatcirak.service.approval.controller.rest.model.StateDetailUpdateRequest;
-import me.nevzatcirak.service.approval.controller.rest.model.QueryRequest;
+import me.nevzatcirak.service.approval.controller.rest.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +30,18 @@ public interface ProcessController {
     ResponseEntity<ApprovalProcess> createApprovalProcess(
             @ApiParam("Approval Process Initial Request Data")
             @RequestBody CreateApprovalRequest request);
+
+    /**
+     * This endpoint will be deleted after a test usage
+     *
+     * @param request
+     * @return ApprovalProcess
+     */
+    @PostMapping("/create-with-creator")
+    @ApiOperation(value = "Create Approval Process", notes = "New process adding method")
+    ResponseEntity<ApprovalProcess> createApprovalProcess(
+            @ApiParam("Approval Process Initial Request Data")
+            @RequestBody CreateApprovalRequestWithCreator request);
 
     /**
      * Update a process detail state by using username and status
