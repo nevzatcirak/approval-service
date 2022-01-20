@@ -40,6 +40,9 @@ public class ProcessDetailDocument implements Serializable {
     @Field("comment")
     private String comment;
 
+    @Field("updated_at")
+    private Long updatedAt;
+
     @Field("status")
     private Integer status;
 
@@ -97,6 +100,15 @@ public class ProcessDetailDocument implements Serializable {
         return this;
     }
 
+    public Long getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public ProcessDetailDocument setUpdatedAt(Long updatedAt) {
+        this.updatedAt = updatedAt;
+        return this;
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -120,7 +132,8 @@ public class ProcessDetailDocument implements Serializable {
                 ", processId=" + processId +
                 ", sequenceNumber=" + sequenceNumber +
                 ", username='" + username + '\'' +
-                ", comment=" + comment +
+                ", comment='" + comment + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
                 ", status=" + status +
                 ", active=" + active +
                 '}';

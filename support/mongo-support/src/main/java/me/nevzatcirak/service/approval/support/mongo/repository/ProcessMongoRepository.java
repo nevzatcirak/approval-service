@@ -44,12 +44,12 @@ public interface ProcessMongoRepository extends MongoRepository<ProcessDocument,
                                                                          int state,
                                                                          List<Long> legitProcessIds);
 
-    @Query(value = "{'documentType' : ?0, '$or': [{'creator': ?1}, {'_id':{'$in': ?2}}]}")
+    @Query(value = "{'documentType' : ?0, '$or': [{'status': 1}, {'creator': ?1}, {'_id':{'$in': ?2}}]}")
     Optional<Set<ProcessDocument>> findAllByDocumentTypeAndUsername(String documentType,
                                                                     String username,
                                                                     List<Long> legitProcessIds);
 
-    @Query(value = "{'documentType' : ?0, 'documentId':{'$in': ?2}, '$or':[{'creator': ?1},{'_id':{'$in': ?3}}]}")
+    @Query(value = "{'documentType' : ?0, 'documentId':{'$in': ?2}, '$or':[{'status': 1}, {'creator': ?1},{'_id':{'$in': ?3}}]}")
     Optional<Set<ProcessDocument>> findAllByDocumentTypeIdsAndUsername(String documentType,
                                                                        String username,
                                                                        Set<String> documentIds,

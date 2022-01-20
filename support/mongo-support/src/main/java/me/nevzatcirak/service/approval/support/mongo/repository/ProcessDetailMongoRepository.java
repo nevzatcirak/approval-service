@@ -14,7 +14,7 @@ import java.util.Set;
  * Created by nevzatcirak at 08/12/2021
  */
 public interface ProcessDetailMongoRepository extends MongoRepository<ProcessDetailDocument, Long> {
-    @Query(value = "{'username' : ?0, '$or':[{'active' : true},{'$or': [{'status': 1},{'status': 0}]}]}", fields = "{'processId': 1}")
+    @Query(value = "{'username' : ?0, '$or':[{'active' : true},{'$or': [{'status': -1},{'status': 1}]}]}", fields = "{'processId': 1}")
     Optional<List<ProcessDetailDocument>> findProcessIdsByEligibleUsername(String username);
 }
 

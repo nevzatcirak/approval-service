@@ -20,8 +20,8 @@ public class Approver implements Serializable {
     private Integer sequenceNumber;
     private String username;
     private String comment;
+    private Long updatedAt;
     private ApprovalProcessState status;
-    @JsonIgnore
     private Boolean active = false;
 
     public Long getId() {
@@ -69,6 +69,15 @@ public class Approver implements Serializable {
         return this;
     }
 
+    public Long getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public Approver setUpdatedAt(Long updatedAt) {
+        this.updatedAt = updatedAt;
+        return this;
+    }
+
     public ApprovalProcessState getStatus() {
         return status;
     }
@@ -94,6 +103,8 @@ public class Approver implements Serializable {
                 ", processId=" + processId +
                 ", sequenceNumber=" + sequenceNumber +
                 ", username='" + username + '\'' +
+                ", comment='" + comment + '\'' +
+                ", updatedAt=" + updatedAt +
                 ", status=" + status +
                 ", active=" + active +
                 '}';

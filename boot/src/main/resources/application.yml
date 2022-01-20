@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8083
 
 spring:
   application:
@@ -11,10 +11,5 @@ spring:
       indent_output: true
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: test
-      username: infra
-      password: infra
-      authentication-database: admin
+      uri: mongodb://10.3.3.3:27017/developer-exercise-db?connectTimeoutMS=120000&socketTimeoutMS=120000
       auto-index-creation: true

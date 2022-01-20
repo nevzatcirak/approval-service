@@ -30,6 +30,7 @@ public class ProcessDetailConverter implements Converter<Approver, ProcessDetail
                 .setProcessId(processDetailDocument.getProcessId())
                 .setUsername(processDetailDocument.getUsername())
                 .setComment(processDetailDocument.getComment())
+                .setUpdatedAt(processDetailDocument.getUpdatedAt())
                 .setSequenceNumber(processDetailDocument.getSequenceNumber())
                 .setActive(processDetailDocument.isActive())
                 .setStatus(ApprovalProcessState.valueOf(processDetailDocument.getStatus()));
@@ -45,6 +46,7 @@ public class ProcessDetailConverter implements Converter<Approver, ProcessDetail
         document.setStatus(approver.getStatus().value());
         document.setSequenceNumber(approver.getSequenceNumber());
         document.setProcessId(approver.getProcessId());
+        document.setUpdatedAt(approver.getUpdatedAt());
         document.setActive(approver.isActive());
         if (Objects.isNull(approver.getId()))
             document.setId(sequenceGenerator.generateIdSequence(ProcessDetailDocument.SEQUENCE_NAME));

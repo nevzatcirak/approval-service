@@ -1,6 +1,8 @@
 package me.nevzatcirak.service.approval.service;
 
 import me.nevzatcirak.service.approval.api.exception.ApprovalProcessNotFoundException;
+import me.nevzatcirak.service.approval.api.exception.ApproverAlreadyApprovedException;
+import me.nevzatcirak.service.approval.api.exception.ApproverAlreadyRejectedException;
 import me.nevzatcirak.service.approval.api.exception.ApproverNotFoundException;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcess;
 import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
@@ -11,11 +13,9 @@ import me.nevzatcirak.service.approval.api.repository.ProcessRepository;
 import me.nevzatcirak.service.approval.api.service.ProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Manages approval process core logic
@@ -32,14 +32,38 @@ public class ProcessCoreService implements ProcessService {
     @Override
     public ApprovalProcess create(String documentId, String documentType, Set<ApproverSummary> approvers) {
         Set<Approver> processDetails = new LinkedHashSet<>();
-        approvers.forEach(approver -> processDetails.add(new Approver()
-                .setUsername(approver.getUsername())
-                .setSequenceNumber(approver.getSequenceNumber())
-                .setStatus(ApprovalProcessState.WAITING)));
+        approvers.forEach(approver -> {
+            Assert.notNull(approver.getUsername(), "Approver username must not be null!");
+            Assert.notNull(approver.getSequenceNumber(), "Approver sequence number must not be null!");
+            processDetails.add(new Approver()
+                    .setUsername(approver.getUsername().trim())
+                    .setSequenceNumber(approver.getSequenceNumber())
+                    .setStatus(ApprovalProcessState.WAITING));
+        });
         ApprovalProcess approvalProcess = new ApprovalProcess()
-                .setDocumentId(documentId)
-                .setDocumentType(documentType)
+                .setDocumentId(documentId.trim())
+                .setDocumentType(documentType.trim())
                 .setStatus(ApprovalProcessState.WAITING)
+                .setApprovers(processDetails);
+        return processRepository.save(approvalProcess);
+    }
+
+    @Override
+    public ApprovalProcess create(String documentId, String documentType, String creator, Set<ApproverSummary> approvers) {
+        Set<Approver> processDetails = new LinkedHashSet<>();
+        approvers.forEach(approver -> {
+            Assert.notNull(approver.getUsername(), "Approver username must not be null!");
+            Assert.notNull(approver.getSequenceNumber(), "Approver sequence number must not be null!");
+            processDetails.add(new Approver()
+                    .setUsername(approver.getUsername().trim())
+                    .setSequenceNumber(approver.getSequenceNumber())
+                    .setStatus(ApprovalProcessState.WAITING));
+        });
+        ApprovalProcess approvalProcess = new ApprovalProcess()
+                .setDocumentId(documentId.trim())
+                .setDocumentType(documentType.trim())
+                .setStatus(ApprovalProcessState.WAITING)
+                .setCreator(creator)
                 .setApprovers(processDetails);
         return processRepository.save(approvalProcess);
     }
@@ -191,17 +215,26 @@ public class ProcessCoreService implements ProcessService {
                     currentApprover.setStatus(status);
                     currentApprover.setActive(false);
                     currentApprover.setComment(comment);
-                    saveNextApproverActiveStatus(detailRepository.update(currentApprover), approvers);
+                    currentApprover.setUpdatedAt(Calendar.getInstance().getTimeInMillis());
+                    Approver updatedCurrentApprover = detailRepository.update(currentApprover);
                     boolean isAllApproved = approvers.stream().allMatch(approvalDetail
                             -> approvalDetail.getStatus().equals(ApprovalProcessState.APPROVED));
-                    if (status.equals(ApprovalProcessState.REJECTED) || isAllApproved)
+                    if (status.equals(ApprovalProcessState.REJECTED) || isAllApproved) {
                         process.setStatus(status);
-                    else
+                    } else {
+                        saveNextApproverActiveStatus(updatedCurrentApprover, approvers);
                         process.setStatus(ApprovalProcessState.WAITING);
+                    }
                     return processRepository.update(process);
                 }
             }
-        throw new ApproverNotFoundException("Not found an approver username(" + username + ") in related process, or approver is not the next approver.");
+        Optional<Approver> relatedApprover = approvers.stream().filter(appr -> appr.getUsername().equals(username)).findFirst();
+        if (relatedApprover.isPresent())
+            if (relatedApprover.get().getStatus().equals(ApprovalProcessState.APPROVED))
+                throw new ApproverAlreadyApprovedException("User(" + username + ") already approved the process.");
+            else
+                throw new ApproverAlreadyRejectedException("User(" + username + ") already rejected the process.");
+        throw new ApproverNotFoundException("Not found any approver user(" + username + ") in related process, or approver is not the next approver.");
     }
 
     private void saveNextApproverActiveStatus(Approver current, Set<Approver> approvers) {

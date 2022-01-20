@@ -24,6 +24,16 @@ public interface ProcessService {
     ApprovalProcess create(String documentId, String documentType, Set<ApproverSummary> approvers);
 
     /**
+     * Creates new approval process by using Service type, Document Id and Approver Info
+     *
+     * @param documentId
+     * @param documentType
+     * @param approvers
+     * @return ApprovalProcess
+     */
+    ApprovalProcess create(String documentId, String documentType, String creator, Set<ApproverSummary> approvers);
+
+    /**
      * Update a process detail state by using username and status
      *
      * @param documentId
