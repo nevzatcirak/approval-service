@@ -31,7 +31,7 @@ public interface ProcessService {
      * @param approvers
      * @return ApprovalProcess
      */
-    ApprovalProcess create(String documentId, String documentType, String creator, Set<ApproverSummary> approvers);
+    ApprovalProcess create(String documentId, String documentType, String creator, ApprovalProcessState status, Set<ApproverSummary> approvers);
 
     /**
      * Update a process detail state by using username and status

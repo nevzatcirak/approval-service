@@ -49,12 +49,14 @@ public class ProcessCoreService implements ProcessService {
     }
 
     @Override
-    public ApprovalProcess create(String documentId, String documentType, String creator, Set<ApproverSummary> approvers) {
+    public ApprovalProcess create(String documentId, String documentType, String creator, ApprovalProcessState status, Set<ApproverSummary> approvers) {
         Set<Approver> processDetails = new LinkedHashSet<>();
         approvers.forEach(approver -> {
             Assert.notNull(approver.getUsername(), "Approver username must not be null!");
             Assert.notNull(approver.getSequenceNumber(), "Approver sequence number must not be null!");
             processDetails.add(new Approver()
+                    .setActive(status.equals(ApprovalProcessState.WAITING))
+                    .setStatus(status)
                     .setUsername(approver.getUsername().trim())
                     .setSequenceNumber(approver.getSequenceNumber())
                     .setStatus(ApprovalProcessState.WAITING));

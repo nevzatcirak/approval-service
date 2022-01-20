@@ -2,6 +2,7 @@ package me.nevzatcirak.service.approval.controller.rest.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
 import me.nevzatcirak.service.approval.api.model.ApproverSummary;
 
 import java.io.Serializable;
@@ -20,6 +21,8 @@ public class CreateApprovalRequestWithCreator implements Serializable {
     private String type;
     @ApiModelProperty("Creator name")
     private String creator;
+    @ApiModelProperty("Status")
+    private ApprovalProcessState status;
     @ApiModelProperty("Approvers who will approve related document")
     private Set<ApproverSummary> approvers;
 
@@ -45,6 +48,14 @@ public class CreateApprovalRequestWithCreator implements Serializable {
 
     public void setCreator(String creator) {
         this.creator = creator;
+    }
+
+    public ApprovalProcessState getStatus() {
+        return status;
+    }
+
+    public void setStatus(ApprovalProcessState status) {
+        this.status = status;
     }
 
     public Set<ApproverSummary> getApprovers() {

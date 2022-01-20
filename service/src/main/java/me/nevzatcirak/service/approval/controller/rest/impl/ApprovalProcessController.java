@@ -39,7 +39,7 @@ public class ApprovalProcessController implements ProcessController {
         Assert.notNull(request.getType(), "Document service type must not be null!");
         Assert.notNull(request.getApprovers(), "Approvers of approval create request must not be null!");
         Assert.notEmpty(request.getApprovers(), "Approvers of approval create request must not be empty!");
-        return ResponseEntity.ok(processService.create(request.getId(), request.getType(), request.getCreator(), request.getApprovers()));
+        return ResponseEntity.ok(processService.create(request.getId(), request.getType(), request.getCreator(), request.getStatus() ,request.getApprovers()));
     }
 
     @Override
