@@ -5,10 +5,7 @@ import me.nevzatcirak.service.approval.api.model.ApprovalProcessState;
 import me.nevzatcirak.service.approval.api.model.Approver;
 import me.nevzatcirak.service.approval.api.service.ProcessService;
 import me.nevzatcirak.service.approval.controller.rest.ProcessController;
-import me.nevzatcirak.service.approval.controller.rest.model.CreateApprovalRequest;
-import me.nevzatcirak.service.approval.controller.rest.model.ProcessRequestState;
-import me.nevzatcirak.service.approval.controller.rest.model.QueryRequest;
-import me.nevzatcirak.service.approval.controller.rest.model.StateDetailUpdateRequest;
+import me.nevzatcirak.service.approval.controller.rest.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -33,6 +30,16 @@ public class ApprovalProcessController implements ProcessController {
         Assert.notNull(request.getApprovers(), "Approvers of approval create request must not be null!");
         Assert.notEmpty(request.getApprovers(), "Approvers of approval create request must not be empty!");
         return ResponseEntity.ok(processService.create(request.getId(), request.getType(), request.getApprovers()));
+    }
+
+    @Override
+    public ResponseEntity<ApprovalProcess> createApprovalProcess(CreateApprovalRequestWithCreator request) {
+        Assert.notNull(request, "Approval process create request must not be null!");
+        Assert.notNull(request.getId(), "Document id must not be null!");
+        Assert.notNull(request.getType(), "Document service type must not be null!");
+        Assert.notNull(request.getApprovers(), "Approvers of approval create request must not be null!");
+        Assert.notEmpty(request.getApprovers(), "Approvers of approval create request must not be empty!");
+        return ResponseEntity.ok(processService.create(request.getId(), request.getType(), request.getCreator(), request.getApprovers()));
     }
 
     @Override
